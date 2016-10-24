@@ -1,0 +1,13 @@
+{
+    "presets": [
+        "es2015"
+    ],
+    "env": {
+        "development": {
+            "plugins": [
+                "espower",
+                "transform-runtime"
+            ]
+        }
+    }
+}
