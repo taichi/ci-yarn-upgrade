@@ -1,20 +1,22 @@
 {
-  "name": "ci-yarn-update",
+  "name": "ci-yarn-upgrade",
   "version": "0.0.1",
   "description": "Keep NPM dependencies up-to-date with CI, providing version-to-version diff for each library",
-  "main": "lib/index.js",
+  "bin": "lib/index.js",
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production babel src --out-dir lib --source-maps inline",
+    "compile": "cross-env NODE_ENV=production babel src --out-dir lib --source-maps inline",
+    "lint": "eslint src/ test/",
     "test": "ava",
+    "build": "npm run lint && npm run compile && npm run test",
     "watch": "babel src --out-dir lib --watch --source-maps inline",
     "watch:test": "cross-env NODE_ENV=development ava --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/taichi/ci-yarn-update.git"
+    "url": "git+https://github.com/taichi/ci-yarn-upgrade.git"
   },
   "keywords": [
     "yarn",
@@ -25,9 +27,9 @@
   "author": "taichi",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/taichi/ci-yarn-update/issues"
+    "url": "https://github.com/taichi/ci-yarn-upgrade/issues"
   },
-  "homepage": "https://github.com/taichi/ci-yarn-update",
+  "homepage": "https://github.com/taichi/ci-yarn-upgrade",
   "dependencies": {
     "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
