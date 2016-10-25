@@ -1,0 +1,31 @@
+{
+    "name": "Circle CI nightly builder",
+    "description": "Heroku app to trigger Circle CI build to create maintenance pull requests",
+    "keywords": [
+        "CircleCI",
+        "GitHub"
+    ],
+    "env": {
+        "PROJECT": {
+            "description": "GitHub repository to build, e.g. taichi/ci-yarn-upgrade"
+        },
+        "BRANCH": {
+            "description": "Git branch to build",
+            "value": "master"
+        },
+        "CIRCLECI_TOKEN": {
+            "description": "CircleCI: Project Settings -> API Permissions -> Create a token with 'All' scope"
+        },
+        "TZ": {
+            "description": "TimeZone for the app",
+            "value": "Asia/Tokyo",
+            "required": false
+        },
+        "TRIGGER_NAME": {
+            "value": "YARN_UPGRADE"
+        }
+    },
+    "addons": [
+        "scheduler:standard"
+    ]
+}

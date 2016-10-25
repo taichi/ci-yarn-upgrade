@@ -91,6 +91,18 @@ see [HTTP Proxy support](https://github.com/nodegit/nodegit/issues/489)
     cd ci-yarn-upgrade
     yarn install
 
+### Heroku Scheduler
+
+If you want to setup heroku schedulers, there's a template for it:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/taichi/ci-yarn-upgrade)
+
+To test it, run the following command:
+
+```sh
+heroku run './build-circleci'
+```
+
 ## License
 
 ```

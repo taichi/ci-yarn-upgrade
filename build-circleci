@@ -1,0 +1,22 @@
+#!/bin/sh
+# parameters are passed via environment variables:
+# CIRCLECI_TOKEN
+# PROJECT
+# BRANCH
+# TRIGGER_NAME
+#
+# see app.json for details.
+
+api_prefix=https://circleci.com/api/v1
+trigger_build_url="${api_prefix}/project/${PROJECT}/tree/${BRANCH}"
+payload="{ \"build_parameters\": { \"${TRIGGER_NAME}\": \"true\" } }"
+
+echo "URL: ${trigger_build_url}"
+echo "Payload: ${payload}"
+
+curl \
+  --header "Accept: application/json" \
+  --header "Content-Type: application/json" \
+  --header "User-Agent: build-circleci/1.0" \
+  --data "${payload}" \
+  --request POST "${trigger_build_url}?circle-token=${CIRCLECI_TOKEN}"
