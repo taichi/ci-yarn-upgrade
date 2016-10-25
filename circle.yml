@@ -12,12 +12,13 @@ dependencies:
     - sudo apt-get update -qq
     - sudo apt-get install -y -qq yarn
     - sudo apt-get install -y -qq libstdc++-4.9-dev
+    - npm install ci-yarn-upgrade --global
   override:
     - yarn install
     - yarn run lint 
     - yarn run compile
   post:
-    - yarn outdated
+    - ci-yarn-upgrade --verbose
   cache_directories:
     - "~/.yarn-cache"
 
@@ -27,8 +28,5 @@ deployment:
     commands:
       - >
         if [ -n "${YARN_UPGRADE}" ] ; then
-          npm install ci-yarn-upgrade --global;
-          pwd;
-          ls;
           ci-yarn-upgrade --execute --verbose;
         fi
