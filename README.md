@@ -45,7 +45,7 @@ this configuration contains install `yarn` and `libstdc++-4.9-dev` for `nodegit`
         - sudo apt-get update -qq
         - sudo apt-get install -y -qq yarn
         # For nodegit
-        - sudo apt-get install -y libstdc++-4.9-dev
+        - sudo apt-get install -y -qq libstdc++-4.9-dev
 
 
 #### Configure Parameterized Builds
