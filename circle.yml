@@ -14,7 +14,8 @@ dependencies:
     - sudo apt-get install -y -qq libstdc++-4.9-dev
   override:
     - yarn install
-    - yarn run build
+    - yarn run lint 
+    - yarn run compile
   post:
     - yarn outdated
   cache_directories:
