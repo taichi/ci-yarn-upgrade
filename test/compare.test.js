@@ -1,5 +1,6 @@
 import test from "ava";
 
+import pkg from "../package.json";
 import { __test__ } from "../src/compare.js";
 
 const [CompareView, toMarkdown, toTextTable] = __test__;
@@ -55,7 +56,7 @@ test("toMarkdown#simple", t => {
 | classnames | v2.2.0 | v2.2.5 |
 | react | v15.0.0...v15.3.2 | v15.3.2 |
 
-Powered by [ci-yarn-upgrade](https://github.com/taichi/ci-yarn-upgrade)`.split(/[\r]?\n/);
+Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
     let actual = toMarkdown(entries).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);
@@ -73,7 +74,7 @@ test("toMarkdown#complex", t => {
 |:---- |:--------:|:------:|
 | [react](${cw.homepage}) | [v15.0.0...v15.3.2](${cw.repo}/compare/v15.0.0...v15.3.2) | [v15.3.2](${cw.repo}/compare/v15.0.0...v15.3.2) |
 
-Powered by [ci-yarn-upgrade](https://github.com/taichi/ci-yarn-upgrade)`.split(/[\r]?\n/);
+Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
     let actual = toMarkdown(entries).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);

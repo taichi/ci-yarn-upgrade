@@ -2,6 +2,7 @@ import url from "url";
 
 import Table from "cli-table2";
 
+import pkg from "../package.json";
 import rpt from "./promise/read-package-tree";
 
 class CompareView {
@@ -79,7 +80,7 @@ function toMarkdown(entries) {
 |:---- |:--------:|:------:|
 ${rows()}
 
-Powered by [ci-yarn-upgrade](https://github.com/taichi/ci-yarn-upgrade)`;
+Powered by [${pkg.name}](${pkg.homepage})`;
 }
 
 function toTextTable(entries) {
