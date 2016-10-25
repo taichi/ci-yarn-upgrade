@@ -27,7 +27,8 @@ deployment:
     commands:
       - >
         if [ -n "${YARN_UPGRADE}" ] ; then
-          npm install -g npm;
           npm install ci-yarn-upgrade --global;
+          pwd;
+          ls;
           ci-yarn-upgrade --execute --verbose;
         fi
