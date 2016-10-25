@@ -1,9 +1,10 @@
 import moment from "moment";
-import cmd from "commander";
+import { Command } from "commander";
 
 import pkg from "../package.json";
 import ur from "./upgrade-request";
 
+let cmd = new Command(pkg.name);
 let defaultPrefix = "yarn-upgrade/";
 cmd.version(pkg.version)
     .description(pkg.description)
@@ -26,7 +27,8 @@ if (cmd.username && cmd.useremail && cmd.token) {
             cmd.logger("All done!!");
         })
         .catch((err) => {
-            console.error(`> ${err}`);
+            let msg = typeof err === "object" ? JSON.stringify(err) : err;
+            console.error(`> ${msg}`);
             process.exit(1);
         });
     /* eslint-enable no-console */

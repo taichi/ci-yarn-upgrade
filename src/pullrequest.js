@@ -30,7 +30,9 @@ export default function (options, remote, baseRef, newRef, diff) {
             };
         }).then(value => {
             LOG("BEGIN Send PullRequest.");
-            return github.pullRequests.create(value).then(() => LOG("END   Send PullRequest."));
+            return github.pullRequests.create(value).then(body => {
+                LOG(`END   Send PullRequest. ${body.html_url}`);
+            });
         });
     } else {
         LOG("Sending PullRequest is skipped because --execute is not specified.");
