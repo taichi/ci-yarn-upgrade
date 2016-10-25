@@ -31,7 +31,7 @@ our complete example is [here](https://github.com/taichi/ci-yarn-upgrade/blob/ma
 * [Parameterized Builds](https://circleci.com/docs/parameterized-builds/)
 * [Nightly Builds](https://circleci.com/docs/nightly-builds/)
 
-#### Install dependent libraries 
+#### Install dependent libraries
 
 this configuration contains install `yarn` and `libstdc++-4.9-dev` for `nodegit`.
 
@@ -65,7 +65,7 @@ this configuration contains install `yarn` and `libstdc++-4.9-dev` for `nodegit`
 
 ## Command Behavior
 
-By default, ci-yarn-upgrade runs in dry-run mode. 
+By default, ci-yarn-upgrade runs in dry-run mode.
 
     ci-yarn-upgrade
 
@@ -80,7 +80,7 @@ if you set `--execute`, this command push branch to remote, and make a pull requ
 ### Limitation
 
 this command don't work with proxy.
-this limitation comes from nodegit. 
+this limitation comes from nodegit.
 see [HTTP Proxy support](https://github.com/nodegit/nodegit/issues/489)
 
 ## Development

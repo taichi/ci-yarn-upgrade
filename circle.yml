@@ -15,7 +15,7 @@ dependencies:
     - npm install ci-yarn-upgrade --global
   override:
     - yarn install
-    - yarn run lint 
+    - yarn run lint
     - yarn run compile
   post:
     - ci-yarn-upgrade --verbose
