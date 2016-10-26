@@ -29,8 +29,12 @@ export default class {
             .then(out => out.stdout.trim());
     }
 
+    branch(newBranch) {
+        return this.run(["branch", newBranch]);
+    }
+
     checkout(newBranch) {
-        return this.run(["checkout", "-b", newBranch]);
+        return this.run(["checkout", newBranch]);
     }
 
     add(file) {
@@ -50,5 +54,9 @@ export default class {
         return this.run(["remote", "get-url", "--push", remote]).then(out => {
             return out.stdout.trim();
         });
+    }
+
+    deleteBranch(branch) {
+        return this.run(["branch", "-D", branch]);
     }
 }
