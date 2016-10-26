@@ -20,6 +20,12 @@ You can add environment variables using the **Project settings > Environment Var
 * You may set `GIT_USER_NAME` and `GIT_USER_EMAIL`
   * this appliction uses `GIT_USER_NAME` and `GIT_USER_EMAIL` for commit
 
+### Add DeployKey to GitHub from CircleCI
+
+this command is pushing from build, so you should add read/write deployment key at **Project settings > Checkout SSH keys ** page of your project.
+
+* [Adding read/write deployment key](https://circleci.com/docs/adding-read-write-deployment-key/)
+
 ### Getting CircleCI API token
 
 API token from your CircleCI [account dashboard](https://circleci.com/account/api).
