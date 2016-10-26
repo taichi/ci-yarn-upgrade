@@ -10,7 +10,7 @@ function findOutdatedDeps(LOG, out) {
     if (1 < raw.length) {
         LOG(`difference table ${raw[0]}`);
         let diff = JSON.parse(raw[0]).data.body;
-        if (diff.some(v => v[1] !== v[2])) {
+        if (diff && diff.some(v => v[1] !== v[2])) {
             LOG("Found outdated dependencies.");
             let hex = new hash.sha1().update(raw[0], "utf8").digest("hex");
             return [diff, hex];

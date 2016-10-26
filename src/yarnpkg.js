@@ -18,7 +18,7 @@ export default class {
         return spawn(COMMAND, ["outdated", "--json"], { cwd: this.cwd })
             .then(out => {
                 this.LOG("END   yarnpkg outdated");
-                return out.stdout;
+                return out.stdout.trim();
             });
     }
 
