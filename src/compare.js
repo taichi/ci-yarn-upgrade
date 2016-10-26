@@ -1,5 +1,6 @@
-import url from "url";
+import giturl from "git-url-parse";
 
+import _ from "lodash";
 import Table from "cli-table2";
 
 import pkg from "../package.json";
@@ -54,10 +55,17 @@ function toCompareViews(cwd, diff) {
     return rpt(cwd, (n, k) => map.get(k)).then(data => {
         data.children.forEach(e => {
             let pkg = e.package;
-            let u = pkg.repository && pkg.repository.url && url.parse(pkg.repository.url);
             let c = map.get(pkg.name);
-            c.repo = u && `https://${u.host}${u.path.replace(/\.git$/, "")}`;
             c.homepage = pkg.homepage;
+            if (pkg.repository) {
+                if (pkg.repository.url) {
+                    let u = giturl(pkg.repository.url);
+                    c.repo = u && u.toString("https");
+                }
+                if (_.isString(pkg.repository) && 2 === pkg.split("/")) {
+                    c.repo = `https://github.com/${pkg.repository}`;
+                }
+            }
         });
         return Array.from(map.values());
     });
