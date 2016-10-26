@@ -100,21 +100,35 @@ Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
 test("toTextTable", t => {
     let diff = [
         ["classnames", "2.2.0", "2.2.0", "2.2.5"],
-        ["react", "15.0.0", "15.3.2", "15.3.2"]
+        ["react", "15.0.0", "15.3.2", "15.3.2"],
+        ["fsevents", "1.0.0", "1.0.7", "1.0.14"]
     ];
     let map = new Map(diff.map(e => {
         let cw = new CompareView(e);
         return [cw.name, cw];
     }));
-    let expected = `\u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m=========\u001b[39m
- Name       \u001b[90m|\u001b[39m Updating          \u001b[90m|\u001b[39m Latest
-\u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m---------\u001b[39m
- classnames \u001b[90m|\u001b[39m v2.2.0            \u001b[90m|\u001b[39m 2.2.5
-\u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m---------\u001b[39m
- react      \u001b[90m|\u001b[39m v15.0.0...v15.3.2 \u001b[90m|\u001b[39m 15.3.2
-\u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m=========\u001b[39m`.split(/[\r]?\n/);
+    let rootDef = {
+        "dependencies": {
+            "classnames": "2.2.0"
+        },
+        "devDependencies": {
+            "react": "^15.0.0"
+        },
+        "optionalDependencies": {
+            "fsevents": "^1.0.0"
+        }
+    };
+    let expected = `\u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m==========\u001b[39m\u001b[90m===============\u001b[39m\u001b[90m==================\u001b[39m\u001b[90m=======================\u001b[39m
+ Name \u001b[90m|\u001b[39m     Updating      \u001b[90m|\u001b[39m Latest  \u001b[90m|\u001b[39m dependencies \u001b[90m|\u001b[39m devDependencies \u001b[90m|\u001b[39m optionalDependencies
+\u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m----------\u001b[39m\u001b[90m---------------\u001b[39m\u001b[90m------------------\u001b[39m\u001b[90m-----------------------\u001b[39m
+ classnames \u001b[90m|\u001b[39m      v2.2.0       \u001b[90m|\u001b[39m v2.2.5  \u001b[90m|\u001b[39m      *       \u001b[90m|\u001b[39m                 \u001b[90m|\u001b[39m
+\u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m----------\u001b[39m\u001b[90m---------------\u001b[39m\u001b[90m------------------\u001b[39m\u001b[90m-----------------------\u001b[39m
+ react \u001b[90m|\u001b[39m v15.0.0...v15.3.2 \u001b[90m|\u001b[39m v15.3.2 \u001b[90m|\u001b[39m              \u001b[90m|\u001b[39m        *        \u001b[90m|\u001b[39m
+\u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m----------\u001b[39m\u001b[90m---------------\u001b[39m\u001b[90m------------------\u001b[39m\u001b[90m-----------------------\u001b[39m
+ fsevents \u001b[90m|\u001b[39m  v1.0.0...v1.0.7  \u001b[90m|\u001b[39m v1.0.14 \u001b[90m|\u001b[39m              \u001b[90m|\u001b[39m                 \u001b[90m|\u001b[39m          *
+\u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m==========\u001b[39m\u001b[90m===============\u001b[39m\u001b[90m==================\u001b[39m\u001b[90m=======================\u001b[39m`.split(/[\r]?\n/);
 
-    let actual = toTextTable([{}, map]).split(/[\r]?\n/);
+    let actual = toTextTable([rootDef, map]).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i].trim(), expected[i].trim());
     }
