@@ -67,31 +67,63 @@ function toCompareViews(cwd, diff) {
                 }
             }
         });
-        return Array.from(map.values());
+        return [data, map];
     });
 }
 
-function toMarkdown(entries) {
-    let rows = () => entries.map(c => {
-        let r = "| ";
-        r += c.homepage ? `[${c.name}](${c.homepage})` : c.name;
-        r += " | ";
-        r += c.repo ? `[${c.rangeWanted()}](${c.diffWantedURL()})` : c.rangeWanted();
-        r += " | ";
-        r += c.repo ? `[v${c.latest}](${c.diffLatestURL()})` : `v${c.latest}`;
-        r += " |";
-        return r;
-    }).join("\r\n");
+class Column {
+    constructor(name, layout, render) {
+        this.name = name;
+        this.layout = layout;
+        this.render = render;
+    }
+}
+
+function makeColumns(map) {
+    let columns = [];
+    columns.push(new Column("Name", ":---- ", cw => {
+        return cw.homepage ? `[${cw.name}](${cw.homepage})` : cw.name;
+    }));
+    columns.push(new Column("Updating", ":--------:", cw => {
+        return cw.repo ? `[${cw.rangeWanted()}](${cw.diffWantedURL()})` : cw.rangeWanted();
+    }));
+    columns.push(new Column("Latest", ":------:", cw => {
+        return cw.repo ? `[v${cw.latest}](${cw.diffLatestURL()})` : `v${cw.latest}`;
+    }));
+    return columns;
+}
+
+function headers(columns) {
+    let a = columns.map(col => col.name);
+    return "| " + a.join(" | ") + " |";
+}
+
+function layouts(columns) {
+    let a = columns.map(col => col.layout);
+    return "|" + a.join("|") + "|";
+}
+
+function rows(columns, entries) {
+    return entries.map(c => {
+        let a = columns.map(col => col.render(c));
+        return "| " + a.join(" | ") + " |";
+    }).join("\n");
+}
+
+function toMarkdown([rootDef, map]) {
+    let columns = makeColumns(map);
+    let entries = Array.from(map.values());
     return `## Updating Dependencies
 
-| Name | Updating | Latest |
-|:---- |:--------:|:------:|
-${rows()}
+${headers(columns)}
+${layouts(columns)}
+${rows(columns, entries)}
 
 Powered by [${pkg.name}](${pkg.homepage})`;
 }
 
-function toTextTable(entries) {
+function toTextTable([rootDef, map]) {
+    let entries = Array.from(map.values());
     let t = new Table({
         head: ["Name", "Updating", "Latest"],
         chars: {

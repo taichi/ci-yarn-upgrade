@@ -48,7 +48,10 @@ test("toMarkdown#simple", t => {
         ["classnames", "2.2.0", "2.2.0", "2.2.5"],
         ["react", "15.0.0", "15.3.2", "15.3.2"]
     ];
-    let entries = diff.map(e => new CompareView(e));
+    let map = new Map(diff.map(e => {
+        let cw = new CompareView(e);
+        return [cw.name, cw];
+    }));
     let expected = `## Updating Dependencies
 
 | Name | Updating | Latest |
@@ -57,7 +60,7 @@ test("toMarkdown#simple", t => {
 | react | v15.0.0...v15.3.2 | v15.3.2 |
 
 Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
-    let actual = toMarkdown(entries).split(/[\r]?\n/);
+    let actual = toMarkdown([{}, map]).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);
     }
@@ -67,7 +70,7 @@ test("toMarkdown#complex", t => {
     let cw = new CompareView(["react", "15.0.0", "15.3.2", "15.3.2"]);
     cw.homepage = "https://facebook.github.io/react/";
     cw.repo = "https://github.com/facebook/react";
-    let entries = [cw];
+    let map = new Map().set(cw.name, cw);
     let expected = `## Updating Dependencies
 
 | Name | Updating | Latest |
@@ -75,7 +78,7 @@ test("toMarkdown#complex", t => {
 | [react](${cw.homepage}) | [v15.0.0...v15.3.2](${cw.repo}/compare/v15.0.0...v15.3.2) | [v15.3.2](${cw.repo}/compare/v15.0.0...v15.3.2) |
 
 Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
-    let actual = toMarkdown(entries).split(/[\r]?\n/);
+    let actual = toMarkdown([{}, map]).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);
     }
@@ -86,7 +89,10 @@ test("toTextTable", t => {
         ["classnames", "2.2.0", "2.2.0", "2.2.5"],
         ["react", "15.0.0", "15.3.2", "15.3.2"]
     ];
-    let entries = diff.map(e => new CompareView(e));
+    let map = new Map(diff.map(e => {
+        let cw = new CompareView(e);
+        return [cw.name, cw];
+    }));
     let expected = `\u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m=========\u001b[39m
  Name       \u001b[90m|\u001b[39m Updating          \u001b[90m|\u001b[39m Latest
 \u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m---------\u001b[39m
@@ -95,7 +101,7 @@ test("toTextTable", t => {
  react      \u001b[90m|\u001b[39m v15.0.0...v15.3.2 \u001b[90m|\u001b[39m 15.3.2
 \u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m=========\u001b[39m`.split(/[\r]?\n/);
 
-    let actual = toTextTable(entries).split(/[\r]?\n/);
+    let actual = toTextTable([{}, map]).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i].trim(), expected[i].trim());
     }
