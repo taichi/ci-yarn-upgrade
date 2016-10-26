@@ -33,19 +33,15 @@ our complete example is [here](https://github.com/taichi/ci-yarn-upgrade/blob/ma
 
 #### Install dependent libraries
 
-this configuration contains install `yarn` and `libstdc++-4.9-dev` for `nodegit`.
+you should install `yarnpkg` before using this command.
 
     dependencies:
       pre:
-        # For nodegit
-        - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
         # Install Yarn
         - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
         - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
         - sudo apt-get update -qq
         - sudo apt-get install -y -qq yarn
-        # For nodegit
-        - sudo apt-get install -y -qq libstdc++-4.9-dev
 
 
 #### Configure Parameterized Builds
@@ -76,12 +72,6 @@ this command works locally.
     ci-yarn-upgrade --execute
 
 if you set `--execute`, this command push branch to remote, and make a pull request.
-
-### Limitation
-
-this command don't work with proxy.
-this limitation comes from nodegit.
-see [HTTP Proxy support](https://github.com/nodegit/nodegit/issues/489)
 
 ## Development
 
