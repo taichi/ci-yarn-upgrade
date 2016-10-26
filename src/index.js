@@ -27,8 +27,7 @@ if (cmd.username && cmd.useremail && cmd.token) {
             cmd.logger("All done!!");
         })
         .catch((err) => {
-            let msg = typeof err === "object" ? JSON.stringify(err) : err;
-            console.error(`> ${msg}`);
+            console.error(err);
             process.exit(1);
         });
     /* eslint-enable no-console */
