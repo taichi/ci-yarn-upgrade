@@ -10,7 +10,7 @@ export default class {
         let msg = `git ${subcmd.join(" ")}`;
         this.LOG(`BEGIN ${msg}`);
         return spawn("git", subcmd, { cwd: this.cwd }).then(result => {
-            this.LOG(`END  ${msg}`);
+            this.LOG(`END   ${msg}`);
             return result;
         });
     }
