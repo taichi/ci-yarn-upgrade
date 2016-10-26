@@ -53,12 +53,10 @@ test("findExistingBranch#worksNormally", t => {
         now: "112233"
     };
     let names = [];
-    let br = { a: "z" };
     let d = { b: "c" };
     let hex = "azazazaz";
-    let [newBranch, baseRef, diff] = findExistingBranch(LOG, options, names, br, d, hex);
+    let [newBranch, diff] = findExistingBranch(LOG, options, names, d, hex);
     t.is(newBranch, `${options.prefix}${options.now}/${hex}`);
-    t.is(baseRef, br);
     t.is(diff, d);
 });
 
@@ -69,31 +67,10 @@ test("findExistingBranch#foundExistingBranch", t => {
     };
     let hex = "azazazaz";
     let names = ["3322", `hoge/22/${hex}`, "dddd"];
-    let br = { a: "z" };
     let d = { b: "c" };
     t.plan(1);
-    return findExistingBranch(LOG, options, names, br, d, hex)
+    return findExistingBranch(LOG, options, names, d, hex)
         .catch(m => t.pass(m));
-});
-
-test("selectPushPromise#worksNormally", t => {
-    let options = {
-        execute: true
-    };
-    let newRef = {
-        ccc: 33
-    };
-    t.plan(2);
-    return selectPushPromise(LOG, options, {
-        push: ([nr]) => {
-            t.is(newRef, nr);
-            return {
-                then: fn => {
-                    t.truthy(fn);
-                }
-            };
-        }
-    }, newRef);
 });
 
 test("selectPushPromise#emptyPromise", t => {
