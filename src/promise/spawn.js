@@ -2,6 +2,7 @@ var spawn = require("cross-spawn");
 
 export default function (cmd, subcmd = [], options = {}) {
     return new Promise((resolve, reject) => {
+        options.maxBuffer = 1024 * 1024;
         let cp = spawn(cmd, subcmd, options);
         let stdout = [], stderr = [];
         let error = "";

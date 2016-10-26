@@ -45,7 +45,7 @@ function selectPushPromise(LOG, options, remote, newRef) {
 
 function toCallbackOptions(options) {
     return {
-        credentials: function (targetURL, name) {
+        credentials: (targetURL, name) => {
             let u = url.parse(targetURL);
             if (-1 < u.protocol.indexOf("http")) {
                 return git.Cred.userpassPlaintextNew(options.token, "x-oauth-basic");
