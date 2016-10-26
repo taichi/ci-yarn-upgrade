@@ -39,6 +39,18 @@ function selectPushPromise(LOG, options, git, remote, branch) {
     return Promise.resolve();
 }
 
+function selectDeletePromise(LOG, options, git, newBranch, report) {
+    let p;
+    if (options.keep) {
+        LOG("Working branch is kept.");
+        p = Promise.resolve();
+    } else {
+        LOG("Delete working branch because --keep is not specified.");
+        p = git.checkout("-").then(() => git.deleteBranch(newBranch));
+    }
+    return p.then(() => report);
+}
+
 // for tesing purpose
 export const __test__ = [findOutdatedDeps, findExistingBranch, selectPushPromise];
 
@@ -55,7 +67,9 @@ export default function (options) {
             findExistingBranch(LOG, options, names, diff, hex))
         .then(([newBranch, diff]) => git.currentBranch().then(b => [b, newBranch, diff]))
         .then(([baseBranch, newBranch, diff]) =>
-            git.checkout(newBranch).then(() => [baseBranch, newBranch, diff]))
+            git.branch(newBranch)
+                .then(() => git.checkout(newBranch))
+                .then(() => [baseBranch, newBranch, diff]))
         .then(([baseBranch, newBranch, diff]) =>
             yarnpkg.upgrade().then(() => [baseBranch, newBranch, diff]))
         .then(([baseBranch, newBranch, diff]) =>
@@ -69,6 +83,10 @@ export default function (options) {
         .then(([baseBranch, newBranch, diff]) => git.remoteurl("origin")
             .then(remote => [remote, baseBranch, newBranch, diff]))
         .then(([remote, baseBranch, newBranch, diff]) =>
-            sendPullRequest(options, remote, baseBranch, newBranch, diff));
+            sendPullRequest(options, remote, baseBranch, newBranch, diff)
+                .then(report => [report, newBranch]))
+        .then(([report, newBranch]) =>
+            selectDeletePromise(LOG, options, git, newBranch, report))
+        ;
 }
 

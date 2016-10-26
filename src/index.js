@@ -14,6 +14,7 @@ cmd.version(pkg.version)
     .option("-t, --token <token>", "specify personal access token for GitHub. use only for debugging purpose. You should set GITHUB_ACCESS_TOKEN to environment variable.", process.env.GITHUB_ACCESS_TOKEN)
     .option("--execute", "if you don't specify this option, allows you to test this application.", false)
     .option("-v, --verbose", `shows details about the running ${pkg.name}`, false)
+    .option("-k, --keep", "if you specify this option, keep working branch after all.", false)
     .option("--prefix <prefix>", `specify working branch prefix. default prefix is "${defaultPrefix}"`, defaultPrefix)
     .option("--workingdir <path>", `specify project root dir. it contains package.json. default path is ${process.cwd()}`, process.cwd())
     .parse(process.argv);
