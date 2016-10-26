@@ -1,4 +1,5 @@
 import moment from "moment";
+import { isString } from "lodash";
 import { Command } from "commander";
 
 import pkg from "../package.json";
@@ -27,8 +28,12 @@ if (cmd.username && cmd.useremail && cmd.token) {
             cmd.logger("All done!!");
         })
         .catch((err) => {
-            console.error(err);
-            process.exit(1);
+            if (isString(err)) {
+                console.log(err);
+            } else {
+                console.error(err);
+                process.exit(1);
+            }
         });
     /* eslint-enable no-console */
 } else {
