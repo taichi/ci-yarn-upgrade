@@ -35,9 +35,9 @@
     "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
     "cross-spawn": "^4.0.2",
+    "git-url-parse": "^6.0.7",
     "github": "^5.2.2",
     "moment": "^2.15.0",
-    "nodegit": "^0.16.0",
     "read-package-tree": "^5.1.5",
     "sha.js": "^2.4.5"
   },
