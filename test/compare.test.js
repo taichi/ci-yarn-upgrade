@@ -97,6 +97,6 @@ test("toTextTable", t => {
 
     let actual = toTextTable(entries).split(/[\r]?\n/);
     for (let i in expected) {
-        t.is(actual[i], expected[i]);
+        t.is(actual[i].trim(), expected[i].trim());
     }
 });
