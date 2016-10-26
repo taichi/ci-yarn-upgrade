@@ -2,6 +2,8 @@
 
 This command keeps npm dependencies up-to-date by making pull requests from CI.
 
+![ci-yarn-upgrade](docs/ci-yarn-upgrade.png)
+
 This is inspired by [bitjourney/ci-npm-update](https://github.com/bitjourney/ci-npm-update).
 
 ## Installation
@@ -60,7 +62,6 @@ you should install `yarnpkg` before using this command.
         commands:
           - >
             if [ -n "${YARN_UPGRADE}" ] ; then
-              npm install -g npm
               npm install ci-yarn-upgrade --global
               ci-yarn-upgrade --execute
             fi
