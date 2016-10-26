@@ -2,7 +2,7 @@ import test from "ava";
 
 import { __test__ } from "../src/upgrade-request";
 
-const [findOutdatedDeps, findExistingBranch, selectPushPromise] = __test__;
+const [findOutdatedDeps, findExistingBranch, selectPushPromise, selectDeletePromise] = __test__;
 
 let LOG = () => { };
 
@@ -73,10 +73,52 @@ test("findExistingBranch#foundExistingBranch", t => {
         .catch(m => t.pass(m));
 });
 
+test("selectPushPromise#worksNormally", t => {
+    let options = {
+        execute: true
+    };
+    let r = "origin";
+    let b = "mybranch";
+    t.plan(1);
+    return selectPushPromise(LOG, options, {
+        push: (remote, branch) => {
+            t.deepEqual([remote, branch], [r, b]);
+        }
+    }, r, b);
+});
+
 test("selectPushPromise#emptyPromise", t => {
     let options = {
         execute: false
     };
     t.plan(1);
     return selectPushPromise(LOG, options, {}, {}).then(() => t.pass());
+});
+
+test("selectDeletePromise#worksNormally", t => {
+    let options = {
+        keep: false
+    };
+    let branch = "mybranch";
+    let report = "myReport";
+    t.plan(2);
+    return selectDeletePromise(LOG, options, {
+        deleteBranch: b => {
+            t.is(b, branch);
+            return {
+                then: (fn) => {
+                    t.is(fn(), report);
+                }
+            };
+        }
+    }, branch, report);
+});
+
+test("selectDeletePromise#emptyPromise", t => {
+    let options = {
+        keep: true
+    };
+    let report = "myReport";
+    t.plan(1);
+    return selectDeletePromise(LOG, options, {}, "", report).then(r => t.is(r, report));
 });

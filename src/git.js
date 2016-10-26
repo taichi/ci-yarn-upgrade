@@ -15,6 +15,15 @@ export default class {
         });
     }
 
+    setup(name, email) {
+        return this.config("user.name", name)
+            .then(() => this.config("user.email", email));
+    }
+
+    config(key, value) {
+        return this.run(["config", key, value]);
+    }
+
     fetch(remote) {
         return this.run(["fetch", "--prune", remote]);
     }
@@ -29,21 +38,20 @@ export default class {
             .then(out => out.stdout.trim());
     }
 
-    branch(newBranch) {
-        return this.run(["branch", newBranch]);
+    checkout(branch) {
+        return this.run(["checkout", branch]);
     }
 
-    checkout(newBranch) {
-        return this.run(["checkout", newBranch]);
+    checkoutWith(newBranch) {
+        return this.run(["checkout", "-b", newBranch]);
     }
 
     add(file) {
         return this.run(["add", file]);
     }
 
-    commit(username, useremail, message) {
-        let author = `"${username} <${useremail}>"`;
-        return this.run(["commit", "--author", author, "-m", message]);
+    commit(message) {
+        return this.run(["commit", "-m", message]);
     }
 
     push(remote, branch) {
