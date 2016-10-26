@@ -79,7 +79,7 @@ class Column {
     }
 }
 
-function makeColumns(map) {
+function makeColumns(rootDef, map) {
     let columns = [];
     columns.push(new Column("Name", ":---- ", cw => {
         return cw.homepage ? `[${cw.name}](${cw.homepage})` : cw.name;
@@ -90,6 +90,16 @@ function makeColumns(map) {
     columns.push(new Column("Latest", ":------:", cw => {
         return cw.repo ? `[v${cw.latest}](${cw.diffLatestURL()})` : `v${cw.latest}`;
     }));
+    let depnames = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies", "bundledDependencies"];
+    depnames.forEach(n => {
+        let deps = rootDef[n];
+        if (deps && Array.from(map.keys()).find(k => deps[k])) {
+            columns.push(new Column(n, ":-:", cw => {
+                return deps[cw.name] ? "*" : " ";
+            }));
+        }
+    });
+
     return columns;
 }
 
@@ -111,7 +121,7 @@ function rows(columns, entries) {
 }
 
 function toMarkdown([rootDef, map]) {
-    let columns = makeColumns(map);
+    let columns = makeColumns(rootDef, map);
     let entries = Array.from(map.values());
     return `## Updating Dependencies
 

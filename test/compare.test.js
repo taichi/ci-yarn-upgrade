@@ -46,21 +46,34 @@ test("CompareView#diffURL#tree", t => {
 test("toMarkdown#simple", t => {
     let diff = [
         ["classnames", "2.2.0", "2.2.0", "2.2.5"],
-        ["react", "15.0.0", "15.3.2", "15.3.2"]
+        ["react", "15.0.0", "15.3.2", "15.3.2"],
+        ["fsevents", "1.0.0", "1.0.7", "1.0.14"]
     ];
     let map = new Map(diff.map(e => {
         let cw = new CompareView(e);
         return [cw.name, cw];
     }));
+    let rootDef = {
+        "dependencies": {
+            "classnames": "2.2.0"
+        },
+        "devDependencies": {
+            "react": "^15.0.0"
+        },
+        "optionalDependencies": {
+            "fsevents": "^1.0.0"
+        }
+    };
     let expected = `## Updating Dependencies
 
-| Name | Updating | Latest |
-|:---- |:--------:|:------:|
-| classnames | v2.2.0 | v2.2.5 |
-| react | v15.0.0...v15.3.2 | v15.3.2 |
+| Name | Updating | Latest | dependencies | devDependencies | optionalDependencies |
+|:---- |:--------:|:------:|:-:|:-:|:-:|
+| classnames | v2.2.0 | v2.2.5 | * |   |   |
+| react | v15.0.0...v15.3.2 | v15.3.2 |   | * |   |
+| fsevents | v1.0.0...v1.0.7 | v1.0.14 |   |   | * |
 
 Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
-    let actual = toMarkdown([{}, map]).split(/[\r]?\n/);
+    let actual = toMarkdown([rootDef, map]).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);
     }
