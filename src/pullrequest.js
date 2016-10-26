@@ -7,7 +7,6 @@ import { markdownView, simpleView } from "./compare";
 
 function newClient(options, url) {
     let ghopt = {
-        debug: options.verbose,
         headers: {
             "user-agent": `${pkg.name}/${pkg.version}`
         }
