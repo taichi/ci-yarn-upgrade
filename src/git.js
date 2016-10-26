@@ -16,7 +16,7 @@ export default class {
     }
 
     fetch(remote) {
-        return this.run(["fetch", remote]);
+        return this.run(["fetch", "--prune", remote]);
     }
 
     branchList() {
