@@ -88,11 +88,11 @@ test("toTextTable", t => {
     ];
     let entries = diff.map(e => new CompareView(e));
     let expected = `\u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m=========\u001b[39m
- Name       \u001b[90m|\u001b[39m Updating          \u001b[90m|\u001b[39m Latest 
+ Name       \u001b[90m|\u001b[39m Updating          \u001b[90m|\u001b[39m Latest
 \u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m---------\u001b[39m
- classnames \u001b[90m|\u001b[39m v2.2.0            \u001b[90m|\u001b[39m 2.2.5  
+ classnames \u001b[90m|\u001b[39m v2.2.0            \u001b[90m|\u001b[39m 2.2.5
 \u001b[90m------------\u001b[39m\u001b[90m--------------------\u001b[39m\u001b[90m---------\u001b[39m
- react      \u001b[90m|\u001b[39m v15.0.0...v15.3.2 \u001b[90m|\u001b[39m 15.3.2 
+ react      \u001b[90m|\u001b[39m v15.0.0...v15.3.2 \u001b[90m|\u001b[39m 15.3.2
 \u001b[90m============\u001b[39m\u001b[90m====================\u001b[39m\u001b[90m=========\u001b[39m`.split(/[\r]?\n/);
 
     let actual = toTextTable(entries).split(/[\r]?\n/);
