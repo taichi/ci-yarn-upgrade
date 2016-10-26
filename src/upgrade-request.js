@@ -8,6 +8,7 @@ function findOutdatedDeps(LOG, out) {
     LOG("Find some outdated dependencies.");
     let raw = out.split(/[\r]?\n/);
     if (1 < raw.length) {
+        LOG(`difference table ${raw[0]}`);
         let diff = JSON.parse(raw[0]).data.body;
         if (diff.some(v => v[1] !== v[2])) {
             LOG("Found outdated dependencies.");
