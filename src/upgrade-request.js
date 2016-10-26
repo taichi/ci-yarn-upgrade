@@ -1,3 +1,5 @@
+import url from "url";
+
 import git from "nodegit";
 import hash from "sha.js";
 
@@ -43,8 +45,12 @@ function selectPushPromise(LOG, options, remote, newRef) {
 
 function toCallbackOptions(options) {
     return {
-        credentials: function () {
-            return git.Cred.userpassPlaintextNew(options.token, "x-oauth-basic");
+        credentials: function (targetURL, name) {
+            let u = url.parse(targetURL);
+            if (-1 < u.protocol.indexOf("http")) {
+                return git.Cred.userpassPlaintextNew(options.token, "x-oauth-basic");
+            }
+            return git.Cred.sshKeyFromAgent(name);
         },
         certificateCheck: function () {
             return 1;
