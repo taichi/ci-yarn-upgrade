@@ -24,7 +24,7 @@ You can add environment variables using the **Project settings > Environment Var
 
 ### Add DeployKey to GitHub from CircleCI
 
-this command is pushing from build, so you should add read/write deployment key at **Project settings > Checkout SSH keys ** page of your project.
+this command is pushing from build, so you should add read/write deployment key at **Project settings > Checkout SSH keys** page of your project.
 
 * [Adding read/write deployment key](https://circleci.com/docs/adding-read-write-deployment-key/)
 
