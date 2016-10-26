@@ -8,7 +8,7 @@ This is inspired by [bitjourney/ci-npm-update](https://github.com/bitjourney/ci-
 
 ## Installation
 
-    npm install --global ci-yarn-upgrade
+    yarn global add ci-yarn-upgrade
 
 ## Usage
 
@@ -62,7 +62,7 @@ you should install `yarnpkg` before using this command.
         commands:
           - >
             if [ -n "${YARN_UPGRADE}" ] ; then
-              npm install ci-yarn-upgrade --global
+              yarn global add ci-yarn-upgrade
               ci-yarn-upgrade --execute
             fi
 
