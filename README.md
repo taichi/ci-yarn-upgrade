@@ -72,13 +72,34 @@ By default, ci-yarn-upgrade runs in dry-run mode.
 
     ci-yarn-upgrade
 
-this command works locally.
+this command works locally and output result to standard output.
+
+![dry-run](docs/dry-run.png)
 
 ### execution
 
     ci-yarn-upgrade --execute
 
 if you set `--execute`, this command push branch to remote, and make a pull request.
+
+### CLI options
+
+    Usage: ci-yarn-upgrade [options]
+
+    Keep NPM dependencies up-to-date with CI, providing version-to-version diff for each library
+
+    Options:
+
+      -h, --help                   output usage information
+      -V, --version                output the version number
+      -n, --username <username>    specify the commit auther name. You may set GIT_USER_NAME to environment variable.
+      -e, --useremail <useremail>  specify the commit auther email. You may set GIT_USER_EMAIL to environment variable.
+      -t, --token <token>          specify personal access token for GitHub. use only for debugging purpose. You should set GITHUB_ACCESS_TOKEN to environment variable.
+      --execute                    if you don't specify this option, allows you to test this application.
+      -v, --verbose                shows details about the running ci-yarn-upgrade
+      -k, --keep                   if you specify this option, keep working branch after all.
+      --prefix <prefix>            specify working branch prefix. default prefix is "yarn-upgrade/"
+      --workingdir <path>          specify project root dir. it contains package.json. default path is /path/to/myproject
 
 ## Development
 
