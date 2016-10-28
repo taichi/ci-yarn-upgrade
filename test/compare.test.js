@@ -3,42 +3,42 @@ import test from "ava";
 import pkg from "../package.json";
 import { __test__ } from "../src/compare.js";
 
-const [CompareView, toMarkdown, toTextTable] = __test__;
+const [CompareModel, toMarkdown, toTextTable] = __test__;
 
-test("CompareView#rangeWanted", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#rangeWanted", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     t.true(cw.rangeWanted() === "v0.0.1...v0.2.0");
 });
 
-test("CompareView#rangeLatest", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#rangeLatest", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     t.true(cw.rangeLatest() === "v0.0.1...v3.1.6");
 });
 
-test("CompareView#versionRange#noRange", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#versionRange#noRange", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     t.true(cw.versionRange("0.0.1") === "v0.0.1");
 });
 
-test("CompareView#diffWantedURL#norepo", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#diffWantedURL#norepo", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     t.true(cw.diffWantedURL() === "");
 });
 
-test("CompareView#diffWantedURL", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#diffWantedURL", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     cw.repo = "http://github.com/taichi/test-project";
     t.true(cw.diffWantedURL() === `${cw.repo}/compare/v0.0.1...v0.2.0`);
 });
 
-test("CompareView#diffLatestURL", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#diffLatestURL", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     cw.repo = "http://github.com/taichi/test-project";
     t.true(cw.diffLatestURL() === `${cw.repo}/compare/v0.0.1...v3.1.6`);
 });
 
-test("CompareView#diffURL#tree", t => {
-    let cw = new CompareView(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
+test("CompareModel#diffURL#tree", t => {
+    let cw = new CompareModel(["wayway", "0.0.1", "0.2.0", "3.1.6"]);
     cw.repo = "http://github.com/taichi/test-project";
     t.true(cw.diffURL("0.0.1") === `${cw.repo}/tree/v0.0.1`);
 });
@@ -50,7 +50,7 @@ test("toMarkdown#simple", t => {
         ["fsevents", "1.0.0", "1.0.7", "1.0.14"]
     ];
     let map = new Map(diff.map(e => {
-        let cw = new CompareView(e);
+        let cw = new CompareModel(e);
         return [cw.name, cw];
     }));
     let rootDef = {
@@ -80,7 +80,7 @@ Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
 });
 
 test("toMarkdown#complex", t => {
-    let cw = new CompareView(["react", "15.0.0", "15.3.2", "15.3.2"]);
+    let cw = new CompareModel(["react", "15.0.0", "15.3.2", "15.3.2"]);
     cw.homepage = "https://facebook.github.io/react/";
     cw.repo = "https://github.com/facebook/react";
     let map = new Map().set(cw.name, cw);
@@ -104,7 +104,7 @@ test("toTextTable", t => {
         ["fsevents", "1.0.0", "1.0.7", "1.0.14"]
     ];
     let map = new Map(diff.map(e => {
-        let cw = new CompareView(e);
+        let cw = new CompareModel(e);
         return [cw.name, cw];
     }));
     let rootDef = {

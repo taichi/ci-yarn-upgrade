@@ -6,7 +6,7 @@ import Table from "cli-table2";
 import pkg from "../package.json";
 import rpt from "./promise/read-package-tree";
 
-class CompareView {
+class CompareModel {
     constructor(a) {
         [this.name, this.current, this.wanted, this.latest] = a;
         this.repo = "";
@@ -47,9 +47,9 @@ class CompareView {
     }
 }
 
-function toCompareViews(cwd, diff) {
+function toCompareModels(cwd, diff) {
     let map = new Map(diff.map(d => {
-        let c = new CompareView(d);
+        let c = new CompareModel(d);
         return [c.name, c];
     }));
     return rpt(cwd, (n, k) => map.get(k)).then(data => {
@@ -159,12 +159,12 @@ function toTextTable([rootDef, map]) {
 }
 
 // for tesing purpose
-export const __test__ = [CompareView, toMarkdown, toTextTable];
+export const __test__ = [CompareModel, toMarkdown, toTextTable];
 
 export function markdownView(cwd, diff) {
-    return toCompareViews(cwd, diff).then(toMarkdown);
+    return toCompareModels(cwd, diff).then(toMarkdown);
 }
 
 export function simpleView(cwd, diff) {
-    return toCompareViews(cwd, diff).then(toTextTable);
+    return toCompareModels(cwd, diff).then(toTextTable);
 }
