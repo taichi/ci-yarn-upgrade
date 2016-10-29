@@ -18,11 +18,13 @@ function makeColumns(rootDef, map) {
         return cw.homepage ? `[${cw.name}](${cw.homepage})` : cw.name;
     }, "right", cw => cw.name));
     columns.push(new Column("Updating", ":--------:", cw => {
-        return cw.repo ? `[${cw.rangeWanted()}](${cw.diffWantedURL()})` : cw.rangeWanted();
+        let u = cw.diffWantedURL();
+        return u ? `[${cw.rangeWanted()}](${u})` : cw.rangeWanted();
     }, "center", cw => cw.rangeWanted()));
     columns.push(new Column("Latest", ":------:", cw => {
-        return cw.repo ? `[v${cw.latest}](${cw.diffLatestURL()})` : `v${cw.latest}`;
-    }, "center", cw => `v${cw.latest}`));
+        let u = cw.diffLatestURL();
+        return u ? `[${cw.latest}](${u})` : cw.latest;
+    }, "center", cw => cw.latest));
     let depnames = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies", "bundledDependencies"];
     depnames.forEach(n => {
         let deps = rootDef[n];

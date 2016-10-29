@@ -7,73 +7,115 @@ import pkg from "../package.json";
 import { toMarkdown, toTextTable } from "./compare";
 import rpt from "./promise/read-package-tree";
 
+function toTag(tags, version) {
+    let v = `v${version}`;
+    if (tags.has(v)) {
+        return v;
+    }
+    return tags.has(version) && version;
+}
+
+function diffURL(cm, to) {
+    if (cm.repo) {
+        if (cm.current === to) {
+            let tag = toTag(cm.tags, cm.current);
+            return tag && `${cm.repo}/tree/${tag}`;
+        }
+        let ft = toTag(cm.tags, cm.current);
+        let tt = toTag(cm.tags, to);
+        return ft && tt && `${cm.repo}/compare/${ft}...${tt}`;
+    }
+    return "";
+}
+
+function versionRange(current, to) {
+    if (current === to) {
+        return current;
+    }
+    return `${current}...${to}`;
+}
+
 class CompareModel {
     constructor(a) {
         [this.name, this.current, this.wanted, this.latest] = a;
         this.repo = "";
         this.homepage = "";
+        this.tags = new Set();
     }
 
     rangeWanted() {
-        return this.versionRange(this.wanted);
+        return versionRange(this.current, this.wanted);
     }
 
     rangeLatest() {
-        return this.versionRange(this.latest);
-    }
-
-    versionRange(to) {
-        if (this.current === to) {
-            return `v${this.current}`;
-        }
-        return `v${this.current}...v${to}`;
+        return versionRange(this.current, this.latest);
     }
 
     diffWantedURL() {
-        return this.diffURL(this.wanted);
+        return diffURL(this, this.wanted);
     }
 
     diffLatestURL() {
-        return this.diffURL(this.latest);
-    }
-
-    diffURL(to) {
-        if (this.repo) {
-            if (this.current === to) {
-                return `${this.repo}/tree/v${this.current}`;
-            }
-            return `${this.repo}/compare/${this.versionRange(to)}`;
-        }
-        return "";
+        return diffURL(this, this.latest);
     }
 }
 
-function toCompareModels(cwd, diff) {
+function selectGetTagsPromise(LOG, github, c) {
+    let handler = (prev, res) => {
+        let tags = prev.concat(res.map(t => t.ref.split("/")[2]));
+        if (github.hasNextPage(res)) {
+            return github.getNextPage(res).then(r => handler(tags, r));
+        }
+        return tags;
+    };
+    if (c.repo) {
+        let url = giturl(c.repo);
+        LOG(`BEGIN getTags from ${url.toString("https")}`);
+        return Promise.all([
+            github.gitdata.getTags({ owner: url.owner, repo: url.name })
+                .then(res => handler([], res))
+        ]).then(([tags]) => {
+            LOG(`END   getTags ${tags}`);
+            c.tags = new Set(tags);
+            return c;
+        });
+    }
+    return c;
+}
+
+function reconcile(LOG, github, dep, c) {
+    LOG(`BEGIN reconcile CompareModel ${c.name}`);
+    c.homepage = dep.homepage;
+    if (dep.repository) {
+        if (dep.repository.url) {
+            let u = giturl(dep.repository.url);
+            c.repo = u && u.toString("https");
+        }
+        if (_.isString(dep.repository) && 2 === dep.split("/")) {
+            c.repo = `https://github.com/${dep.repository}`;
+        }
+    }
+    return selectGetTagsPromise(LOG, github, c).then(c => {
+        LOG(`END   reconcile CompareModel ${c.name}`);
+        return c;
+    });
+}
+
+function toCompareModels(LOG, github, cwd, diff) {
     let map = new Map(diff.map(d => {
         let c = new CompareModel(d);
         return [c.name, c];
     }));
+    LOG("BEGIN read-package-tree");
     return rpt(cwd, (n, k) => map.get(k)).then(data => {
-        data.children.forEach(e => {
-            let pkg = e.package;
-            let c = map.get(pkg.name);
-            c.homepage = pkg.homepage;
-            if (pkg.repository) {
-                if (pkg.repository.url) {
-                    let u = giturl(pkg.repository.url);
-                    c.repo = u && u.toString("https");
-                }
-                if (_.isString(pkg.repository) && 2 === pkg.split("/")) {
-                    c.repo = `https://github.com/${pkg.repository}`;
-                }
-            }
-        });
-        return [data.package, map];
+        LOG("END   read-package-tree");
+        let ps = data.children.map(e => reconcile(LOG, github, e.package, map.get(e.package.name)));
+        return Promise.all(ps).then(() => [data.package, map]);
     });
 }
 
 // for tesing purpose
-export const __test__ = [CompareModel, toCompareModels];
+export const __test__ = [CompareModel, diffURL, toTag, versionRange];
 
 export default class {
     constructor(options, remote) {
@@ -100,7 +142,7 @@ export default class {
         this.LOG(`prepare PullRequest ${this.url.toString("https")} ${baseBranch}...${newBranch}`);
         if (this.options.execute) {
             this.LOG("Create Markdown Report for PullRequest.");
-            return toCompareModels(this.options.workingdir, diff)
+            return toCompareModels(this.LOG, this.original, this.options.workingdir, diff)
                 .then(([rootDef, map]) => toMarkdown(rootDef, map))
                 .then(view => {
                     return {
@@ -119,7 +161,7 @@ export default class {
                 });
         } else {
             this.LOG("Sending PullRequest is skipped because --execute is not specified.");
-            return toCompareModels(this.options.workingdir, diff)
+            return toCompareModels(this.LOG, this.original, this.options.workingdir, diff)
                 .then(([rootDef, map]) => toTextTable(rootDef, map));
         }
     }
