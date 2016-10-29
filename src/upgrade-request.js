@@ -1,8 +1,8 @@
 import hash from "sha.js";
 
-import Git from "./git";
 import Yarnpkg from "./yarnpkg";
-import sendPullRequest from "./pullrequest";
+import Git from "./git";
+import GitHub from "./github";
 
 function findOutdatedDeps(LOG, out) {
     LOG("Find some outdated dependencies.");
@@ -76,9 +76,9 @@ export default function (options) {
             selectPushPromise(LOG, options, git, "origin", newBranch)
                 .then(() => [baseBranch, newBranch, diff]))
         .then(([baseBranch, newBranch, diff]) => git.remoteurl("origin")
-            .then(remote => [remote, baseBranch, newBranch, diff]))
-        .then(([remote, baseBranch, newBranch, diff]) =>
-            sendPullRequest(options, remote, baseBranch, newBranch, diff)
+            .then(remote => [new GitHub(options, remote), baseBranch, newBranch, diff]))
+        .then(([github, baseBranch, newBranch, diff]) =>
+            github.pullRequest(baseBranch, newBranch, diff)
                 .then(report => [report, newBranch]))
         .then(([report, newBranch]) =>
             selectDeletePromise(LOG, options, git, newBranch, report));
