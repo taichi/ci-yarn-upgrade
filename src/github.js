@@ -70,17 +70,19 @@ function selectGetTagsPromise(LOG, github, c) {
     };
     if (c.repo) {
         let url = giturl(c.repo);
-        LOG(`BEGIN getTags from ${url.toString("https")}`);
-        return Promise.all([
-            github.gitdata.getTags({ owner: url.owner, repo: url.name })
-                .then(res => handler([], res))
-        ]).then(([tags]) => {
-            LOG(`END   getTags ${tags}`);
-            c.tags = new Set(tags);
-            return c;
-        });
+        if (url.owner && url.name) {
+            LOG(`BEGIN getTags from ${url.toString("https")}`);
+            return Promise.all([
+                github.gitdata.getTags({ owner: url.owner, repo: url.name })
+                    .then(res => handler([], res))
+            ]).then(([tags]) => {
+                LOG(`END   getTags ${tags}`);
+                c.tags = new Set(tags);
+                return c;
+            });
+        }
     }
-    return c;
+    return Promise.resolve(c);
 }
 
 function reconcile(LOG, github, dep, c) {
