@@ -17,7 +17,7 @@ dependencies:
   post:
     - ci-yarn-upgrade --verbose
   cache_directories:
-    - "~/.yarn-cache"
+    - "~/.cache/yarn"
 
 deployment:
   update-dependencies:
