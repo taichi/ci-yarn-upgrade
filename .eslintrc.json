@@ -9,18 +9,18 @@
         "sourceType": "module"
     },
     "rules": {
-        "quotes": "error",
-        "no-console": "error",
-        "no-const-assign": "warn",
-        "no-this-before-super": "warn",
-        "no-undef": "warn",
-        "no-unreachable": "warn",
-        "no-unused-vars": "warn",
-        "constructor-super": "warn",
-        "valid-typeof": "warn",
-        "no-extra-semi": "error",
-        "semi": "error",
-        "comma-dangle": "error"
+        "quotes": 2,
+        "no-console": 2,
+        "no-const-assign": 1,
+        "no-this-before-super": 1,
+        "no-undef": 1,
+        "no-unreachable": "1,
+        "no-unused-vars": 1,
+        "constructor-super": 1,
+        "valid-typeof": 1,
+        "no-extra-semi": 2,
+        "semi": 2,
+        "comma-dangle": 2
     },
     "extends": "eslint:recommended"
 }
