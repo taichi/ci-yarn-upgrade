@@ -100,6 +100,7 @@ if you set `--execute`, this command push branch to remote, and make a pull requ
       -k, --keep                   if you specify this option, keep working branch after all.
       --prefix <prefix>            specify working branch prefix. default prefix is "yarn-upgrade/"
       --workingdir <path>          specify project root dir. it contains package.json. default path is /path/to/myproject
+      --with-shadows               if you specify this option, shows shadow dependencies changes.
 
 ## Development
 

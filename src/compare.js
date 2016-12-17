@@ -12,11 +12,11 @@ class Column {
     }
 }
 
-function makeColumns(rootDef, map) {
+function makeColumns(entries) {
     let columns = [];
     columns.push(new Column("Name", ":---- ", cw => {
         return cw.homepage ? `[${cw.name}](${cw.homepage})` : cw.name;
-    }, "right", cw => cw.name));
+    }, "left", cw => cw.name));
     columns.push(new Column("Updating", ":--------:", cw => {
         let u = cw.diffWantedURL();
         return u ? `[${cw.rangeWanted()}](${u})` : cw.rangeWanted();
@@ -25,11 +25,10 @@ function makeColumns(rootDef, map) {
         let u = cw.diffLatestURL();
         return u ? `[${cw.latest}](${u})` : cw.latest;
     }, "center", cw => cw.latest));
-    let depnames = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies", "bundledDependencies"];
+    let depnames = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies", "bundledDependencies", "shadow"];
     depnames.forEach(n => {
-        let deps = rootDef[n];
-        if (deps && Array.from(map.keys()).find(k => deps[k])) {
-            let fn = cw => deps[cw.name] ? "*" : " ";
+        if (entries.find(v => v.packageType === n)) {
+            let fn = cw => cw.packageType === n ? "*" : " ";
             columns.push(new Column(n, ":-:", fn, "center", fn));
         }
     });
@@ -54,9 +53,9 @@ function rows(columns, entries) {
     }).join("\n");
 }
 
-export function toMarkdown(rootDef, map) {
-    let columns = makeColumns(rootDef, map);
+export function toMarkdown(map) {
     let entries = Array.from(map.values());
+    let columns = makeColumns(entries);
     return `## Updating Dependencies
 
 ${headers(columns)}
@@ -66,9 +65,9 @@ ${rows(columns, entries)}
 Powered by [${pkg.name}](${pkg.homepage})`;
 }
 
-export function toTextTable(rootDef, map) {
-    let columns = makeColumns(rootDef, map);
+export function toTextTable(map) {
     let entries = Array.from(map.values());
+    let columns = makeColumns(entries);
     let t = new Table({
         head: columns.map(col => col.name),
         chars: {

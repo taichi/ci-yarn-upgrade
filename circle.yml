@@ -25,5 +25,5 @@ deployment:
     commands:
       - >
         if [ -n "${YARN_UPGRADE}" ] ; then
-          ci-yarn-upgrade --execute --verbose;
+          ci-yarn-upgrade --execute --verbose --with-shadows;
         fi

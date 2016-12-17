@@ -1,6 +1,6 @@
 {
   "name": "ci-yarn-upgrade",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Keep NPM dependencies up-to-date with CI, providing version-to-version diff for each library",
   "preferGlobal": true,
   "bin": "bin/main.js",
@@ -39,6 +39,8 @@
     "github": "^7.0.1",
     "lodash": "^4.16.4",
     "moment": "^2.15.0",
+    "mz": "^2.6.0",
+    "read-package-json": "^2.0.4",
     "read-package-tree": "^5.1.5",
     "sha.js": "^2.4.5"
   },

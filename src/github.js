@@ -37,7 +37,7 @@ function versionRange(current, to) {
 
 class CompareModel {
     constructor(a) {
-        [this.name, this.current, this.wanted, this.latest] = a;
+        [this.name, this.current, this.wanted, this.latest, this.packageType] = a;
         this.repo = "";
         this.homepage = "";
         this.tags = new Set();
@@ -97,7 +97,7 @@ function reconcile(LOG, github, dep, c) {
             c.repo = `https://github.com/${dep.repository}`;
         }
     }
-    return selectGetTagsPromise(LOG, github, c).then(c => {
+    return c.shadow ? Promise.resolve(c) : selectGetTagsPromise(LOG, github, c).then(c => {
         LOG(`END   reconcile CompareModel ${c.name}`);
         return c;
     });
@@ -112,7 +112,7 @@ function toCompareModels(LOG, github, cwd, diff) {
     return rpt(cwd, (n, k) => map.get(k)).then(data => {
         LOG("END   read-package-tree");
         let ps = data.children.map(e => reconcile(LOG, github, e.package, map.get(e.package.name)));
-        return Promise.all(ps).then(() => [data.package, map]);
+        return Promise.all(ps).then(() => map);
     });
 }
 
@@ -145,7 +145,7 @@ export default class {
         if (this.options.execute) {
             this.LOG("Create Markdown Report for PullRequest.");
             return toCompareModels(this.LOG, this.original, this.options.workingdir, diff)
-                .then(([rootDef, map]) => toMarkdown(rootDef, map))
+                .then(toMarkdown)
                 .then(view => {
                     return {
                         owner: this.url.owner,
@@ -164,7 +164,7 @@ export default class {
         } else {
             this.LOG("Sending PullRequest is skipped because --execute is not specified.");
             return toCompareModels(this.LOG, this.original, this.options.workingdir, diff)
-                .then(([rootDef, map]) => toTextTable(rootDef, map));
+                .then(toTextTable);
         }
     }
 }
