@@ -8,25 +8,14 @@ const [CompareModel] = __test__;
 
 test("toMarkdown#simple", t => {
     let diff = [
-        ["classnames", "2.2.0", "2.2.0", "2.2.5"],
-        ["react", "15.0.0", "15.3.2", "15.3.2"],
-        ["fsevents", "1.0.0", "1.0.7", "1.0.14"]
+        ["classnames", "2.2.0", "2.2.0", "2.2.5", "dependencies"],
+        ["react", "15.0.0", "15.3.2", "15.3.2", "devDependencies"],
+        ["fsevents", "1.0.0", "1.0.7", "1.0.14", "optionalDependencies"]
     ];
     let map = new Map(diff.map(e => {
         let cw = new CompareModel(e);
         return [cw.name, cw];
     }));
-    let rootDef = {
-        "dependencies": {
-            "classnames": "2.2.0"
-        },
-        "devDependencies": {
-            "react": "^15.0.0"
-        },
-        "optionalDependencies": {
-            "fsevents": "^1.0.0"
-        }
-    };
     let expected = `## Updating Dependencies
 
 | Name | Updating | Latest | dependencies | devDependencies | optionalDependencies |
@@ -36,7 +25,7 @@ test("toMarkdown#simple", t => {
 | fsevents | 1.0.0...1.0.7 | 1.0.14 |   |   | * |
 
 Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
-    let actual = toMarkdown(rootDef, map).split(/[\r]?\n/);
+    let actual = toMarkdown(map).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);
     }
@@ -55,7 +44,7 @@ test("toMarkdown#complex", t => {
 | [react](${cw.homepage}) | [15.0.0...15.3.2](${cw.repo}/compare/v15.0.0...v15.3.2) | [15.3.2](${cw.repo}/compare/v15.0.0...v15.3.2) |
 
 Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
-    let actual = toMarkdown({}, map).split(/[\r]?\n/);
+    let actual = toMarkdown(map).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i], expected[i]);
     }
@@ -63,25 +52,14 @@ Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
 
 test("toTextTable", t => {
     let diff = [
-        ["classnames", "2.2.0", "2.2.0", "2.2.5"],
-        ["react", "15.0.0", "15.3.2", "15.3.2"],
-        ["fsevents", "1.0.0", "1.0.7", "1.0.14"]
+        ["classnames", "2.2.0", "2.2.0", "2.2.5", "dependencies"],
+        ["react", "15.0.0", "15.3.2", "15.3.2", "devDependencies"],
+        ["fsevents", "1.0.0", "1.0.7", "1.0.14", "optionalDependencies"]
     ];
     let map = new Map(diff.map(e => {
         let cw = new CompareModel(e);
         return [cw.name, cw];
     }));
-    let rootDef = {
-        "dependencies": {
-            "classnames": "2.2.0"
-        },
-        "devDependencies": {
-            "react": "^15.0.0"
-        },
-        "optionalDependencies": {
-            "fsevents": "^1.0.0"
-        }
-    };
     let expected = `\u001b[90m============\u001b[39m\u001b[90m==================\u001b[39m\u001b[90m=========\u001b[39m\u001b[90m===============\u001b[39m\u001b[90m==================\u001b[39m\u001b[90m=======================\u001b[39m
  Name \u001b[90m|\u001b[39m    Updating     \u001b[90m|\u001b[39m Latest \u001b[90m|\u001b[39m dependencies \u001b[90m|\u001b[39m devDependencies \u001b[90m|\u001b[39m optionalDependencies
 \u001b[90m------------\u001b[39m\u001b[90m------------------\u001b[39m\u001b[90m---------\u001b[39m\u001b[90m---------------\u001b[39m\u001b[90m------------------\u001b[39m\u001b[90m-----------------------\u001b[39m
@@ -92,7 +70,7 @@ test("toTextTable", t => {
  fsevents \u001b[90m|\u001b[39m  1.0.0...1.0.7  \u001b[90m|\u001b[39m 1.0.14 \u001b[90m|\u001b[39m              \u001b[90m|\u001b[39m                 \u001b[90m|\u001b[39m          *
 \u001b[90m============\u001b[39m\u001b[90m==================\u001b[39m\u001b[90m=========\u001b[39m\u001b[90m===============\u001b[39m\u001b[90m==================\u001b[39m\u001b[90m=======================\u001b[39m`.split(/[\r]?\n/);
 
-    let actual = toTextTable(rootDef, map).split(/[\r]?\n/);
+    let actual = toTextTable(map).split(/[\r]?\n/);
     for (let i in expected) {
         t.is(actual[i].trim(), expected[i].trim());
     }

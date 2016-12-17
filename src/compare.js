@@ -12,7 +12,7 @@ class Column {
     }
 }
 
-function makeColumns(rootDef, map) {
+function makeColumns(map) {
     let columns = [];
     columns.push(new Column("Name", ":---- ", cw => {
         return cw.homepage ? `[${cw.name}](${cw.homepage})` : cw.name;
@@ -27,9 +27,8 @@ function makeColumns(rootDef, map) {
     }, "center", cw => cw.latest));
     let depnames = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies", "bundledDependencies"];
     depnames.forEach(n => {
-        let deps = rootDef[n];
-        if (deps && Array.from(map.keys()).find(k => deps[k])) {
-            let fn = cw => deps[cw.name] ? "*" : " ";
+        if (Array.from(map.values()).find(v => v.packageType === n)) {
+            let fn = cw => cw.packageType === n ? "*" : " ";
             columns.push(new Column(n, ":-:", fn, "center", fn));
         }
     });
@@ -54,8 +53,8 @@ function rows(columns, entries) {
     }).join("\n");
 }
 
-export function toMarkdown(rootDef, map) {
-    let columns = makeColumns(rootDef, map);
+export function toMarkdown(map) {
+    let columns = makeColumns(map);
     let entries = Array.from(map.values());
     return `## Updating Dependencies
 
@@ -66,8 +65,8 @@ ${rows(columns, entries)}
 Powered by [${pkg.name}](${pkg.homepage})`;
 }
 
-export function toTextTable(rootDef, map) {
-    let columns = makeColumns(rootDef, map);
+export function toTextTable(map) {
+    let columns = makeColumns(map);
     let entries = Array.from(map.values());
     let t = new Table({
         head: columns.map(col => col.name),
