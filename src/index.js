@@ -17,6 +17,7 @@ cmd.version(pkg.version)
     .option("-k, --keep", "if you specify this option, keep working branch after all.", false)
     .option("--prefix <prefix>", `specify working branch prefix. default prefix is "${defaultPrefix}"`, defaultPrefix)
     .option("--workingdir <path>", `specify project root dir. it contains package.json. default path is ${process.cwd()}`, process.cwd())
+    .option("--with-shadows", "reports shadow dependencies change.", false)
     .parse(process.argv);
 
 if (cmd.username && cmd.useremail && cmd.token) {

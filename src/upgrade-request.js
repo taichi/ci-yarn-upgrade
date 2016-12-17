@@ -1,8 +1,11 @@
 import hash from "sha.js";
+import fs from "mz/fs";
+import path from "path";
 
 import Yarnpkg from "./yarnpkg";
 import Git from "./git";
 import GitHub from "./github";
+import rpj from "./promise/read-package-json";
 
 function findOutdatedDeps(LOG, out) {
     LOG("Find some outdated dependencies.");
@@ -18,6 +21,50 @@ function findOutdatedDeps(LOG, out) {
     }
     LOG("Did not find outdated dependencies.");
     return Promise.reject("dependencies are not up to date.");
+}
+
+function collectModuleVersions(options) {
+    if (options.withShadows) {
+        let modules = path.join(options.workingdir, "node_modules");
+        return fs.readdir(modules).then(files => {
+            let ps = files
+                .map(n => path.join(modules, n))
+                .map(n => [n, fs.statSync(n)])
+                .filter(v => v[1].isDirectory())
+                .map(v => path.join(v[0], "package.json"))
+                .map(n => [n, fs.existsSync(n)])
+                .filter(v => v[1])
+                .map(v => rpj(v[0]));
+            return Promise.all(ps).then(pkgs => {
+                return new Map(pkgs.map(pkg => [pkg.name, pkg.version]));
+            });
+        });
+    }
+    return new Map();
+}
+
+function computeUpdatedDependencies(LOG, options, diff, mv, out) {
+    if (options.withShadows) {
+        let msgs = out.split(/[\r]?\n/);
+        let tree = JSON.parse(msgs[msgs.length - 2]);
+
+        let names = new Set(diff.map(d => d[0]));
+        let shadows = tree.data.trees
+            .map(v => v.name.split(/@/))
+            .filter(([name, version]) => {
+                let cur = mv.get(name);
+                return cur ? cur !== version : true;
+            })
+            .map(([name, version]) => {
+                let cur = mv.get(name);
+                return [name, cur || version, version, undefined, "shadow"];
+            })
+            .filter(v => names.has(v[0]) === false);
+        return diff.concat(shadows.sort((left, right) => {
+            return left[0].localeCompare(right[0]);
+        }));
+    }
+    return diff;
 }
 
 function findExistingBranch(LOG, options, names, diff, hex) {
@@ -65,7 +112,8 @@ export default function (options) {
         .then(([diff, hex]) => git.branchList().then(names => [names, diff, hex]))
         .then(([names, diff, hex]) => findExistingBranch(LOG, options, names, diff, hex))
         .then(([newBranch, diff]) => git.checkoutWith(newBranch).then(() => diff))
-        .then(diff => yarnpkg.upgrade().then(() => diff))
+        .then(diff => collectModuleVersions(options).then(mv => [mv, diff]))
+        .then(([mv, diff]) => yarnpkg.upgrade().then(out => computeUpdatedDependencies(LOG, options, diff, mv, out)))
         .then(diff => git.setup(options.username, options.useremail).then(() => diff))
         .then(diff => git.add("yarn.lock").then(() => diff))
         .then(diff => git.commit("update dependencies").then(() => diff))

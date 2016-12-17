@@ -39,6 +39,8 @@
     "github": "^7.0.1",
     "lodash": "^4.16.4",
     "moment": "^2.15.0",
+    "mz": "^2.6.0",
+    "read-package-json": "^2.0.4",
     "read-package-tree": "^5.1.5",
     "sha.js": "^2.4.5"
   },

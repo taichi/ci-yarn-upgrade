@@ -24,7 +24,10 @@ export default class {
 
     upgrade() {
         this.LOG("BEGIN yarnpkg upgrade");
-        return spawn(COMMAND, ["upgrade"], { cwd: this.cwd })
-            .then(() => this.LOG("END   yarnpkg upgrade"));
+        return spawn(COMMAND, ["upgrade", "--json"], { cwd: this.cwd })
+            .then(out => {
+                this.LOG("END   yarnpkg upgrade");
+                return out.stdout.trim();
+            });
     }
 }

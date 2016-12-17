@@ -97,7 +97,7 @@ function reconcile(LOG, github, dep, c) {
             c.repo = `https://github.com/${dep.repository}`;
         }
     }
-    return selectGetTagsPromise(LOG, github, c).then(c => {
+    return c.shadow ? Promise.resolve(c) : selectGetTagsPromise(LOG, github, c).then(c => {
         LOG(`END   reconcile CompareModel ${c.name}`);
         return c;
     });
