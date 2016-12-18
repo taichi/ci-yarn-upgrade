@@ -40,7 +40,7 @@ function collectModuleVersions(options) {
             });
         });
     }
-    return new Map();
+    return Promise.resolve(new Map());
 }
 
 function computeUpdatedDependencies(LOG, options, diff, mv, out) {
