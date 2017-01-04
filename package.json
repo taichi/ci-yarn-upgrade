@@ -33,6 +33,7 @@
   "homepage": "https://github.com/taichi/ci-yarn-upgrade",
   "dependencies": {
     "cli-table2": "^0.2.0",
+    "colors": "^1.1.2",
     "commander": "^2.9.0",
     "cross-spawn": "^5.0.1",
     "git-url-parse": "^6.0.7",
