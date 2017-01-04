@@ -1,6 +1,7 @@
 import moment from "moment";
 import { isString } from "lodash";
 import { Command } from "commander";
+import colors from "colors/safe";
 
 import pkg from "../package.json";
 import ur from "./upgrade-request";
@@ -20,9 +21,9 @@ cmd.version(pkg.version)
     .option("--with-shadows", "if you specify this option, shows shadow dependencies changes.", false)
     .parse(process.argv);
 
+/* eslint-disable no-console */
 if (cmd.username && cmd.useremail && cmd.token) {
     cmd.now = moment().format("YYYYMMDDhhmmss");
-    /* eslint-disable no-console */
     cmd.logger = cmd.verbose ? m => console.log(`> ${m}`) : () => { };
     Promise.all([ur(cmd)])
         .then(([msg]) => {
@@ -37,7 +38,8 @@ if (cmd.username && cmd.useremail && cmd.token) {
                 process.exit(1);
             }
         });
-    /* eslint-enable no-console */
 } else {
+    console.log(colors.red("Please set required parameters: username, useremail, token"));
     cmd.help();
 }
+/* eslint-enable no-console */
