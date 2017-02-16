@@ -17,17 +17,9 @@ test("findOutdatedDeps#worksNormally", t => {
                 ["react-dom", "15.0.0", "15.3.2", "15.3.2"]]
         }
     };
-    let fin = { "type": "finished", "data": 1502 };
-    let [diff, hex] = findOutdatedDeps(LOG, JSON.stringify(json) + "\n" + JSON.stringify(fin));
+    let [diff, hex] = findOutdatedDeps(LOG, JSON.stringify(json));
     t.deepEqual(diff, json.data.body);
     t.true(hex === "f629b46a0b81cad0eb4b418daf62a1850b96755c");
-});
-
-test("findOutdatedDeps#finishOnly", t => {
-    let fin = { "type": "finished", "data": 1502 };
-    t.plan(1);
-    return findOutdatedDeps(LOG, JSON.stringify(fin))
-        .catch(m => t.pass(m));
 });
 
 test("findOutdatedDeps#latestOnly", t => {
@@ -41,9 +33,8 @@ test("findOutdatedDeps#latestOnly", t => {
                 ["react-dom", "15.0.0", "15.0.0", "15.3.2"]]
         }
     };
-    let fin = { "type": "finished", "data": 1502 };
     t.plan(1);
-    return findOutdatedDeps(LOG, JSON.stringify(json) + "\n" + JSON.stringify(fin))
+    return findOutdatedDeps(LOG, JSON.stringify(json))
         .catch(m => t.pass(m));
 });
 
