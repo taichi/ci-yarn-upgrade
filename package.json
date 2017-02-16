@@ -27,7 +27,8 @@
   ],
   "author": "taichi",
   "contributors": [
-    "Michikawa Masayoshi <michikawa.masayoshi@gmail.com>"
+    "Michikawa Masayoshi <michikawa.masayoshi@gmail.com>",
+    "tsub <t-takayama@feedforce.jp>"
   ],
   "license": "Apache-2.0",
   "bugs": {
