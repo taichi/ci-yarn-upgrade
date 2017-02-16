@@ -6,6 +6,14 @@ const [findOutdatedDeps, findExistingBranch, selectPushPromise, selectDeleteProm
 
 let LOG = () => { };
 
+test("findOutdatedDeps#noOutdated", t => {
+    t.plan(1);
+    let p = findOutdatedDeps(LOG, "");
+    return p.catch(err => {
+        t.is(err, "dependencies are not up to date.");
+    });
+});
+
 test("findOutdatedDeps#worksNormally", t => {
     let json = {
         "type": "table", "data":
