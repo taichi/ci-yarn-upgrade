@@ -1,7 +1,6 @@
-.vscode
-.babelrc
-.eslintrc.json
+.*
 src
 test
 node_modules
+*.yml
 yarn.lock
