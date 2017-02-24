@@ -43,9 +43,10 @@ function collectModuleVersions(options) {
 }
 
 function computeUpdatedDependencies(LOG, options, diff, mv, out) {
+    LOG("compute shadow dependencies");
     if (options.withShadows) {
         let msgs = out.split(/[\r]?\n/);
-        let tree = JSON.parse(msgs[msgs.length - 2]);
+        let tree = JSON.parse(msgs[msgs.length - 1]);
 
         let names = new Set(diff.map(d => d[0]));
         let shadows = tree.data.trees
