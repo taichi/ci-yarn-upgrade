@@ -79,6 +79,9 @@ function selectGetTagsPromise(LOG, github, c) {
                 LOG(`END   getTags ${tags}`);
                 c.tags = new Set(tags);
                 return c;
+            }, err => {
+                LOG(`END   getTags ${err}`);
+                return c;
             });
         }
     }
