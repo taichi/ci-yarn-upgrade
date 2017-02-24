@@ -4,4 +4,4 @@
 src
 test
 node_modules
-yarn.lck
+yarn.lock
