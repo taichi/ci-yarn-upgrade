@@ -3,6 +3,7 @@ jobs:
     docker:
       - image: circleci/node:6
     steps:
+      - run: apk add --update --no-cache git openssh-client
       - checkout
       - restore_cache:
           key: dependency-{{ .Environment.CACHE_KEY }}-{{ checksum "yarn.lock" }}
