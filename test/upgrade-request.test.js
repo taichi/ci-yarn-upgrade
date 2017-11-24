@@ -1,10 +1,15 @@
 import test from "ava";
+import os from "os";
 
 import { __test__ } from "../src/upgrade-request";
 
 const [findOutdatedDeps, findExistingBranch, selectPushPromise, selectDeletePromise] = __test__;
 
 let LOG = () => { };
+let HEADER = json => {
+    return "{\"type\":\"info\",\"data\":\"Color legend : \n \"<red>\"    : Major Update backward-incompatible updates \n \"<yellow>\" : Minor Update backward-compatible features \n \"<green>\"  : Patch Update backward-compatible bug fixes\"}" + os.EOL
+        + JSON.stringify(json);
+};
 
 test("findOutdatedDeps#noOutdated", t => {
     t.plan(1);
@@ -25,7 +30,7 @@ test("findOutdatedDeps#worksNormally", t => {
                 ["react-dom", "15.0.0", "15.3.2", "15.3.2"]]
         }
     };
-    let [diff, hex] = findOutdatedDeps(LOG, JSON.stringify(json));
+    let [diff, hex] = findOutdatedDeps(LOG, HEADER(json));
     t.deepEqual(diff, json.data.body);
     t.true(hex === "f629b46a0b81cad0eb4b418daf62a1850b96755c");
 });
@@ -42,7 +47,7 @@ test("findOutdatedDeps#latestOnly", t => {
         }
     };
     t.plan(1);
-    return findOutdatedDeps(LOG, JSON.stringify(json))
+    return findOutdatedDeps(LOG, HEADER(json))
         .catch(m => t.pass(m));
 });
 

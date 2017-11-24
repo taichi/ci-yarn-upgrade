@@ -1,3 +1,5 @@
+import os from "os";
+import _ from "lodash";
 import hash from "sha.js";
 import fs from "mz/fs";
 import path from "path";
@@ -10,11 +12,12 @@ import rpj from "./promise/read-package-json";
 function findOutdatedDeps(LOG, out) {
     LOG("Find some outdated dependencies.");
     LOG(`difference table ${out}`);
-    if (out) {
-        let diff = JSON.parse(out).data.body;
+    let json = _.last(out.split(os.EOL)); // skip Color legend
+    if (json) {
+        let diff = JSON.parse(json).data.body;
         if (diff && diff.some(v => v[1] !== v[2])) {
             LOG("Found outdated dependencies.");
-            let hex = new hash.sha1().update(out, "utf8").digest("hex");
+            let hex = new hash.sha1().update(json, "utf8").digest("hex");
             return [diff, hex];
         }
     }
