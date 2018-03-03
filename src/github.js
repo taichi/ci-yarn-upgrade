@@ -62,7 +62,7 @@ class CompareModel {
 
 function selectGetTagsPromise(LOG, github, c) {
     let handler = (prev, res) => {
-        let tags = prev.concat(res.map(t => t.ref.split("/")[2]));
+        let tags = prev.concat(res.data.map(t => t.ref.split("/")[2]));
         if (github.hasNextPage(res)) {
             return github.getNextPage(res).then(r => handler(tags, r));
         }
