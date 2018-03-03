@@ -95,7 +95,7 @@ function reconcile(LOG, github, dep, c) {
     if (dep.repository) {
         if (dep.repository.url) {
             let u = giturl(dep.repository.url);
-            c.repo = u && u.toString("https");
+            c.repo = u && u.toString("https").replace(/\.git$/, "");
         }
         if (_.isString(dep.repository) && 2 === dep.split("/")) {
             c.repo = `https://github.com/${dep.repository}`;
