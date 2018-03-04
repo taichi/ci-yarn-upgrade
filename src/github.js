@@ -62,7 +62,7 @@ class CompareModel {
 
 function selectGetTagsPromise(LOG, github, c) {
     let handler = (prev, res) => {
-        let tags = prev.concat(res.map(t => t.ref.split("/")[2]));
+        let tags = prev.concat(res.data.map(t => t.ref.split("/")[2]));
         if (github.hasNextPage(res)) {
             return github.getNextPage(res).then(r => handler(tags, r));
         }
@@ -95,7 +95,7 @@ function reconcile(LOG, github, dep, c) {
     if (dep.repository) {
         if (dep.repository.url) {
             let u = giturl(dep.repository.url);
-            c.repo = u && u.toString("https");
+            c.repo = u && u.toString("https").replace(/\.git$/, "");
         }
         if (_.isString(dep.repository) && 2 === dep.split("/")) {
             c.repo = `https://github.com/${dep.repository}`;
