@@ -1,7 +1,7 @@
 import giturl from "git-url-parse";
 import _ from "lodash";
 
-import GitHub from "github";
+import GitHub from "@octokit/rest";
 
 import pkg from "../package.json";
 import { toMarkdown, toTextTable } from "./compare";
