@@ -15,7 +15,7 @@ test("findOutdatedDeps#noOutdated", t => {
     t.plan(1);
     let p = findOutdatedDeps(LOG, "");
     return p.catch(err => {
-        t.is(err, "dependencies are not up to date.");
+        t.is(err, "dependencies are up to date.");
     });
 });
 

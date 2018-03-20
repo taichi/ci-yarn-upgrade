@@ -22,7 +22,7 @@ function findOutdatedDeps(LOG, out) {
         }
     }
     LOG("Did not find outdated dependencies.");
-    return Promise.reject("dependencies are not up to date.");
+    return Promise.reject("dependencies are up to date.");
 }
 
 function collectModuleVersions(options) {
