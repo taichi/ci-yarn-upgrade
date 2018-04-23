@@ -20,9 +20,9 @@ test("toMarkdown#simple", t => {
 
 | Name | Updating | Latest | dependencies | devDependencies | optionalDependencies |
 |:---- |:--------:|:------:|:-:|:-:|:-:|
-| classnames | 2.2.0 | 2.2.5 | * |   |   |
-| react | 15.0.0...15.3.2 | 15.3.2 |   | * |   |
-| fsevents | 1.0.0...1.0.7 | 1.0.14 |   |   | * |
+| \`classnames\` | 2.2.0 | 2.2.5 | * |   |   |
+| \`react\` | 15.0.0...15.3.2 | 15.3.2 |   | * |   |
+| \`fsevents\` | 1.0.0...1.0.7 | 1.0.14 |   |   | * |
 
 Powered by [${pkg.name}](${pkg.homepage})`.split(/[\r]?\n/);
     let actual = toMarkdown(map).split(/[\r]?\n/);
