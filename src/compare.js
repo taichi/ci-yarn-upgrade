@@ -15,7 +15,7 @@ class Column {
 function makeColumns(entries) {
     let columns = [];
     columns.push(new Column("Name", ":---- ", cw => {
-        return cw.homepage ? `[${cw.name}](${cw.homepage})` : cw.name;
+        return cw.homepage ? `[${cw.name}](${cw.homepage})` : `\`${cw.name}\``;
     }, "left", cw => cw.name));
     columns.push(new Column("Updating", ":--------:", cw => {
         let u = cw.diffWantedURL();
