@@ -28,43 +28,51 @@ this command is pushing from build, so you should add read/write deployment key 
 
 * [Adding read/write deployment key](https://circleci.com/docs/adding-read-write-deployment-key/)
 
-### Getting CircleCI API token
-
-API token from your CircleCI [account dashboard](https://circleci.com/account/api).
-
 ### Configure circle.yml
 
 our complete example is [here](https://github.com/taichi/ci-yarn-upgrade/blob/master/circle.yml).
 
-* [Parameterized Builds](https://circleci.com/docs/parameterized-builds/)
-* [Nightly Builds](https://circleci.com/docs/nightly-builds/)
+* [Scheduling a Workflow](https://circleci.com/docs/2.0/workflows/#scheduling-a-workflow)
 
-#### Install dependent libraries
+#### Use official Node image
 
-you should install `yarnpkg` before using this command.
+Official Node image contains `yarn` command now.
 
-    dependencies:
-      pre:
-        # Install Yarn
-        - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
-        - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-        - sudo apt-get update -qq
-        - sudo apt-get install -y -qq yarn
+    docker:
+      - image: node:10-alpine
 
+#### Install git with SSH
 
-#### Configure Parameterized Builds
+Because `ci-yarn-upgrade` uses newer git feature.
 
-`YARN_UPGRADE` environment variable is injected from Parameterized Build API.
+    run: apk add --update --no-cache git openssh-client
 
-    deployment:
-      update-dependencies:
-        branch: master
-        commands:
-          - >
-            if [ -n "${YARN_UPGRADE}" ] ; then
-              yarn global add ci-yarn-upgrade
-              ci-yarn-upgrade --execute
-            fi
+#### Configure Scheduling build
+
+In the example below, the `scheculed-upgrade` workflow is configured to run every wednesday at 13:00pm UTC.
+
+  jobs:
+    yarn-upgrade:
+      docker:
+        - image: node:10-alpine
+      steps:
+        - run: apk add --update --no-cache git openssh-client
+        - checkout
+        - run: yarn global add ci-yarn-upgrade
+        - run: yarn install
+        - run: ci-yarn-upgrade --execute --verbose;
+  workflows:
+    version: 2
+    scheculed-upgrade:
+      triggers:
+        - schedule:
+            cron: "0 13 * * 3"
+            filters:
+              branches:
+                only:
+                  - master
+      jobs:
+        - yarn-upgrade
 
 ## Command Behavior
 
@@ -109,18 +117,6 @@ if you set `--execute`, this command push branch to remote, and make a pull requ
     git clone https://github.com/taichi/ci-yarn-upgrade
     cd ci-yarn-upgrade
     yarn install
-
-### Heroku Scheduler
-
-If you want to setup heroku schedulers, there's a template for it:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/taichi/ci-yarn-upgrade)
-
-To test it, run the following command:
-
-```sh
-heroku run './build-circleci'
-```
 
 ## License
 
