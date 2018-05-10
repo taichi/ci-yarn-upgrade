@@ -23,7 +23,7 @@ jobs:
       - run: yarn install
       - run: yarn lint
       - run: yarn compile
-      - run: ci-yarn-upgrade --verbose
+      - run: ci-yarn-upgrade --latest --verbose
       - run: yarn test
       - save_cache: *save_cache
   yarn-upgrade:
@@ -34,7 +34,7 @@ jobs:
       - restore_cache: *restore_cache
       - run: yarn global add ci-yarn-upgrade
       - run: yarn install
-      - run: ci-yarn-upgrade --execute --verbose;
+      - run: ci-yarn-upgrade --execute --latest --verbose;
       - save_cache: *save_cache
 
 workflows:
