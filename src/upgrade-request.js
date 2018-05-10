@@ -1,4 +1,3 @@
-import os from "os";
 import _ from "lodash";
 import hash from "sha.js";
 import fs from "mz/fs";
@@ -11,8 +10,9 @@ import rpj from "./promise/read-package-json";
 
 function findOutdatedDeps(LOG, out) {
     LOG("Find some outdated dependencies.");
-    LOG(`difference table ${out}`);
-    let json = _.last(out.split(os.EOL)); // skip Color legend
+    LOG(`all of output ${out}`);
+    let json = _.last(out.split(/\r?\n/)); // skip Color legend
+    LOG(`difference table ${json}`);
     if (json) {
         let diff = JSON.parse(json).data.body;
         if (diff && diff.some(v => v[1] !== v[2])) {
@@ -116,7 +116,7 @@ export default function (options) {
         .then(([names, diff, hex]) => findExistingBranch(LOG, options, names, diff, hex))
         .then(([newBranch, diff]) => git.checkoutWith(newBranch).then(() => diff))
         .then(diff => collectModuleVersions(options).then(mv => [mv, diff]))
-        .then(([mv, diff]) => yarnpkg.upgrade().then(out => computeUpdatedDependencies(LOG, options, diff, mv, out)))
+        .then(([mv, diff]) => yarnpkg.upgrade(options.latest).then(out => computeUpdatedDependencies(LOG, options, diff, mv, out)))
         .then(diff => git.setup(options.username, options.useremail).then(() => diff))
         .then(diff => git.add("yarn.lock").then(() => diff))
         .then(diff => git.commit("update dependencies").then(() => diff))

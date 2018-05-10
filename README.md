@@ -104,6 +104,7 @@ if you set `--execute`, this command push branch to remote, and make a pull requ
       -e, --useremail <useremail>  specify the commit auther email. You may set GIT_USER_EMAIL to environment variable.
       -t, --token <token>          specify personal access token for GitHub. use only for debugging purpose. You should set GITHUB_ACCESS_TOKEN to environment variable.
       --execute                    if you don't specify this option, allows you to test this application.
+      -L, --latest                 if you specify this option, upgrades packages ignores the version range specified in package.json
       -v, --verbose                shows details about the running ci-yarn-upgrade
       -k, --keep                   if you specify this option, keep working branch after all.
       --prefix <prefix>            specify working branch prefix. default prefix is "yarn-upgrade/"
