@@ -1,4 +1,4 @@
-import Table from "cli-table2";
+import Table from "@taichi/cli-table2";
 
 import pkg from "../package.json";
 

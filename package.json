@@ -39,7 +39,7 @@
   "homepage": "https://github.com/taichi/ci-yarn-upgrade",
   "dependencies": {
     "@octokit/rest": "^15.4.0",
-    "cli-table2": "^0.2.0",
+    "@taichi/cli-table2": "^0.3.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "cross-spawn": "^6.0.5",
