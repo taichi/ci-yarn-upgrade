@@ -26,11 +26,16 @@ export default class {
             });
     }
 
-    upgrade() {
-        this.LOG("BEGIN yarnpkg upgrade");
-        return spawn(COMMAND, ["upgrade", "--json"], { cwd: this.cwd })
+    upgrade(latest) {
+        let args = ["upgrade", "--json"];
+        if (latest) {
+            args.push("--latest");
+        }
+        let msg = `yarnpkg ${args.join(" ")}`;
+        this.LOG(`BEGIN ${msg}`);
+        return spawn(COMMAND, args, { cwd: this.cwd })
             .then(out => {
-                this.LOG("END   yarnpkg upgrade");
+                this.LOG(`END   ${msg}`);
                 return out.stdout.trim();
             });
     }

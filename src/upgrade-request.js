@@ -116,7 +116,7 @@ export default function (options) {
         .then(([names, diff, hex]) => findExistingBranch(LOG, options, names, diff, hex))
         .then(([newBranch, diff]) => git.checkoutWith(newBranch).then(() => diff))
         .then(diff => collectModuleVersions(options).then(mv => [mv, diff]))
-        .then(([mv, diff]) => yarnpkg.upgrade().then(out => computeUpdatedDependencies(LOG, options, diff, mv, out)))
+        .then(([mv, diff]) => yarnpkg.upgrade(options.latest).then(out => computeUpdatedDependencies(LOG, options, diff, mv, out)))
         .then(diff => git.setup(options.username, options.useremail).then(() => diff))
         .then(diff => git.add("yarn.lock").then(() => diff))
         .then(diff => git.commit("update dependencies").then(() => diff))
