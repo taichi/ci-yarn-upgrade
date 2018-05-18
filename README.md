@@ -51,28 +51,28 @@ Because `ci-yarn-upgrade` uses newer git feature.
 
 In the example below, the `scheculed-upgrade` workflow is configured to run every wednesday at 13:00pm UTC.
 
-  jobs:
-    yarn-upgrade:
-      docker:
-        - image: node:10-alpine
-      steps:
-        - run: apk add --update --no-cache git openssh-client
-        - checkout
-        - run: yarn global add ci-yarn-upgrade
-        - run: yarn install
-        - run: ci-yarn-upgrade --execute --verbose;
-  workflows:
-    version: 2
-    scheculed-upgrade:
-      triggers:
-        - schedule:
-            cron: "0 13 * * 3"
-            filters:
-              branches:
-                only:
-                  - master
-      jobs:
-        - yarn-upgrade
+    jobs:
+      yarn-upgrade:
+        docker:
+          - image: node:10-alpine
+        steps:
+          - run: apk add --update --no-cache git openssh-client
+          - checkout
+          - run: yarn global add ci-yarn-upgrade
+          - run: yarn install
+          - run: ci-yarn-upgrade --execute --verbose;
+    workflows:
+      version: 2
+      scheculed-upgrade:
+        triggers:
+          - schedule:
+              cron: "0 13 * * 3"
+              filters:
+                branches:
+                  only:
+                    - master
+        jobs:
+          - yarn-upgrade
 
 ## Command Behavior
 
