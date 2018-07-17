@@ -3,7 +3,7 @@ import os from "os";
 
 import { __test__ } from "../src/upgrade-request";
 
-const [findOutdatedDeps, findExistingBranch, selectPushPromise, selectDeletePromise] = __test__;
+const [findOutdatedDeps, findExistingBranch, addTargetFiles, selectPushPromise, selectDeletePromise] = __test__;
 
 let LOG = () => { };
 let HEADER = json => {
@@ -75,6 +75,34 @@ test("findExistingBranch#foundExistingBranch", t => {
     t.plan(1);
     return findExistingBranch(LOG, options, names, d, hex)
         .catch(m => t.pass(m));
+});
+
+test("addTargetFiles#latestFlagUnspecified", t => {
+    let options = {
+        latest: false
+    };
+    t.plan(1);
+    let files = [];
+    addTargetFiles(LOG, options, {
+        add: file => {
+          files.push(file);
+        }
+    });
+    t.deepEqual(files, ["yarn.lock"]);
+});
+
+test("addTargetFiles#latestFlagSpecified", t => {
+    let options = {
+        latest: true
+    };
+    t.plan(1);
+    let files = [];
+    addTargetFiles(LOG, options, {
+        add: file => {
+          files.push(file);
+        }
+    });
+    t.deepEqual(files, ["package.json", "yarn.lock"]);
 });
 
 test("selectPushPromise#worksNormally", t => {

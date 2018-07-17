@@ -82,12 +82,12 @@ function findExistingBranch(LOG, options, names, diff, hex) {
 }
 
 function addTargetFiles(LOG, options, git) {
-  if (options.latest) {
-    LOG("Added package.json into request files because --latest is specified.");
-    git.add("package.json");
-  }
+    if (options.latest) {
+        LOG("Added package.json into request files because --latest is specified.");
+        git.add("package.json");
+    }
 
-  return git.add("yarn.lock");
+    return git.add("yarn.lock");
 }
 
 function selectPushPromise(LOG, options, git, remote, branch) {
@@ -111,7 +111,7 @@ function selectDeletePromise(LOG, options, git, branch, report) {
 }
 
 // for tesing purpose
-export const __test__ = [findOutdatedDeps, findExistingBranch, selectPushPromise, selectDeletePromise];
+export const __test__ = [findOutdatedDeps, findExistingBranch, addTargetFiles, selectPushPromise, selectDeletePromise];
 
 export default function (options) {
     let LOG = options.logger;
