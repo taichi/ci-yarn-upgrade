@@ -81,6 +81,15 @@ function findExistingBranch(LOG, options, names, diff, hex) {
     return [newBranch, diff];
 }
 
+function addTargetFiles(LOG, options, git) {
+  if (options.latest) {
+    LOG("Added package.json into request files because --latest is specified.");
+    git.add("package.json");
+  }
+
+  return git.add("yarn.lock");
+}
+
 function selectPushPromise(LOG, options, git, remote, branch) {
     if (options.execute) {
         return git.push(remote, branch);
@@ -117,8 +126,8 @@ export default function (options) {
         .then(([newBranch, diff]) => git.checkoutWith(newBranch).then(() => diff))
         .then(diff => collectModuleVersions(options).then(mv => [mv, diff]))
         .then(([mv, diff]) => yarnpkg.upgrade(options.latest).then(out => computeUpdatedDependencies(LOG, options, diff, mv, out)))
-        .then(diff => git.setup(options.username, options.useremail).then(() => diff))
-        .then(diff => git.add("yarn.lock").then(() => diff))
+        .then(diff => git.setup(options.username, options.useremail).then(() => [diff, options]))
+        .then(([diff, options]) => addTargetFiles(LOG, options, git).then(() => diff))
         .then(diff => git.commit("update dependencies").then(() => diff))
         .then(diff => git.currentBranch().then(newBranch => [newBranch, diff]))
         .then(([newBranch, diff]) => git.checkout("-").then(() => ([newBranch, diff])))
