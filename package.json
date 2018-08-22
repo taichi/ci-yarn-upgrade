@@ -41,10 +41,10 @@
   "dependencies": {
     "@octokit/rest": "^15.4.0",
     "@taichi/cli-table2": "^0.3.0",
-    "colors": "^1.1.2",
+    "colors": "^1.3.1",
     "commander": "^2.9.0",
     "cross-spawn": "^6.0.5",
-    "git-url-parse": "^9.0.0",
+    "git-url-parse": "^10.0.1",
     "lodash": "^4.17.10",
     "moment": "^2.15.0",
     "mz": "^2.6.0",
@@ -58,7 +58,7 @@
     "babel-preset-env": "^1.1.4",
     "chokidar": "^2.0.3",
     "cross-env": "^5.0.5",
-    "eslint": "^4.8.0"
+    "eslint": "^5.4.0"
   },
   "ava": {
     "files": [
