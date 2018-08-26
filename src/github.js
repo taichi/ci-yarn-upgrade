@@ -135,8 +135,7 @@ export default class {
         };
         if (this.url.resource !== "github.com") {
             // for GHE
-            ghopt.host = this.url.resource;
-            ghopt.pathPrefix = "/api/v3";
+            ghopt.baseUrl = `https://${this.url.resource}/api/v3`;
         }
         this.original = new GitHub(ghopt);
         this.original.authenticate({
