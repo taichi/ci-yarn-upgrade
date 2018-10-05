@@ -82,12 +82,16 @@ function findExistingBranch(LOG, options, names, diff, hex) {
 }
 
 function addTargetFiles(LOG, options, git) {
+    let targets = [];
     if (options.latest) {
         LOG("Added package.json into request files because --latest is specified.");
-        git.add("package.json");
+        targets.push("package.json");
     }
-
-    return git.add("yarn.lock");
+    targets.push("yarn.lock");
+    return targets.reduce(
+        (promise, target) => promise.then(() => git.add(target)),
+        Promise.resolve()
+    );
 }
 
 function selectPushPromise(LOG, options, git, remote, branch) {
