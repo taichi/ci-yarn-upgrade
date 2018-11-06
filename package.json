@@ -13,7 +13,8 @@
     "test": "cross-env NODE_ENV=development ava",
     "build": "npm run lint && npm run compile && npm run test",
     "watch": "babel src --out-dir lib --watch --source-maps inline",
-    "watch:test": "cross-env NODE_ENV=development ava --watch"
+    "watch:test": "cross-env NODE_ENV=development ava --watch",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
