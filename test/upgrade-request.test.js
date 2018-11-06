@@ -77,29 +77,29 @@ test("findExistingBranch#foundExistingBranch", t => {
         .catch(m => t.pass(m));
 });
 
-test("addTargetFiles#latestFlagUnspecified", t => {
+test("addTargetFiles#latestFlagUnspecified", async t => {
     let options = {
         latest: false
     };
     t.plan(1);
     let files = [];
-    addTargetFiles(LOG, options, {
+    await addTargetFiles(LOG, options, {
         add: file => {
-          files.push(file);
+            files.push(file);
         }
     });
     t.deepEqual(files, ["yarn.lock"]);
 });
 
-test("addTargetFiles#latestFlagSpecified", t => {
+test("addTargetFiles#latestFlagSpecified", async t => {
     let options = {
         latest: true
     };
     t.plan(1);
     let files = [];
-    addTargetFiles(LOG, options, {
+    await addTargetFiles(LOG, options, {
         add: file => {
-          files.push(file);
+            files.push(file);
         }
     });
     t.deepEqual(files, ["package.json", "yarn.lock"]);
