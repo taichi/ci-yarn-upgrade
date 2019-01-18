@@ -72,9 +72,9 @@ function selectGetTagsPromise(LOG, github, c) {
         let url = giturl(c.repo);
         if (url.owner && url.name) {
             LOG(`BEGIN getTags from ${url.toString("https")}`);
-            let request = { owner: url.owner, repo: url.name };
+            let request = { owner: url.owner, repo: url.name, namespace: "tags/" };
             return Promise.all([
-                github.gitdata.getTags(request)
+                github.gitdata.listRefs(request)
                     .then(res => handler([], res))
             ]).then(([tags]) => {
                 LOG(`END   getTags ${tags}`);
