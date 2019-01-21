@@ -129,18 +129,14 @@ export default class {
         this.LOG = options.logger;
         this.url = giturl(remote);
         let ghopt = {
-            headers: {
-                "user-agent": `${pkg.name}/${pkg.version}`
-            }
+            auth: `token ${options.token}`,
+            userAgent: `${pkg.name}/${pkg.version}`
         };
         if (this.url.resource !== "github.com") {
             // for GHE
             ghopt.baseUrl = `https://${this.url.resource}/api/v3`;
         }
         this.original = new GitHub(ghopt);
-        this.original.authenticate({
-            type: "token", token: options.token
-        });
     }
 
     pullRequest(baseBranch, newBranch, diff) {
