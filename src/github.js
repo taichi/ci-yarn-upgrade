@@ -61,29 +61,21 @@ class CompareModel {
 }
 
 function selectGetTagsPromise(LOG, github, c) {
-    let handler = (prev, res) => {
-        let tags = prev.concat(res.data.map(t => t.ref.split("/")[2]));
-        if (github.hasNextPage(res)) {
-            return github.getNextPage(res).then(r => handler(tags, r));
-        }
-        return tags;
-    };
     if (c.repo) {
         let url = giturl(c.repo);
         if (url.owner && url.name) {
             LOG(`BEGIN getTags from ${url.toString("https")}`);
             let request = { owner: url.owner, repo: url.name, namespace: "tags/" };
-            return Promise.all([
-                github.gitdata.listRefs(request)
-                    .then(res => handler([], res))
-            ]).then(([tags]) => {
-                LOG(`END   getTags ${tags}`);
-                c.tags = new Set(tags);
-                return c;
-            }, err => {
-                LOG(`END   getTags ${request} ${err}`);
-                return c;
-            });
+            return github.paginate("GET /repos/:owner/:repo/git/refs/:namespace",
+                request, response => response.data.map(t => t.ref.split("/")[2]))
+                .then(tags => {
+                    LOG(`END   getTags ${tags}`);
+                    c.tags = new Set(tags);
+                    return c;
+                }, err => {
+                    LOG(`END   getTags ${request} ${err}`);
+                    return c;
+                });
         }
     }
     return Promise.resolve(c);
