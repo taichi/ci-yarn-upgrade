@@ -1,6 +1,6 @@
 {
   "name": "ci-yarn-upgrade",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Keep NPM dependencies up-to-date with CI, providing version-to-version diff for each library",
   "preferGlobal": true,
   "bin": "bin/main.js",
