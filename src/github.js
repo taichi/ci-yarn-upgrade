@@ -148,7 +148,7 @@ export default class {
                     };
                 }).then(value => {
                     this.LOG("BEGIN Send PullRequest.");
-                    return this.original.pullRequests.create(value).then(body => {
+                    return this.original.pulls.create(value).then(body => {
                         this.LOG(`END   Send PullRequest. ${body.data.html_url}`);
                     });
                 });
