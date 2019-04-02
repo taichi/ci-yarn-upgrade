@@ -45,6 +45,7 @@
   "dependencies": {
     "@octokit/rest": "^16.15.0",
     "@taichi/cli-table2": "^0.3.0",
+    "bitbucket-pull-request": "^1.0.1",
     "colors": "^1.3.3",
     "commander": "^2.19.0",
     "cross-spawn": "^6.0.5",
