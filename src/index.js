@@ -20,6 +20,7 @@ cmd.version(pkg.version)
     .option("--prefix <prefix>", `specify working branch prefix. default prefix is "${defaultPrefix}"`, defaultPrefix)
     .option("--workingdir <path>", `specify project root dir. it contains package.json. default path is ${process.cwd()}`, process.cwd())
     .option("--with-shadows", "if you specify this option, shows shadow dependencies changes.", false)
+    .option("--bitbucket", "if you specify this option, pull request will be created on bitbucket", false)
     .parse(process.argv);
 
 /* eslint-disable no-console */

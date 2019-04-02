@@ -6,6 +6,7 @@ import path from "path";
 import Yarnpkg from "./yarnpkg";
 import Git from "./git";
 import GitHub from "./github";
+import BitBucket from "./bitBucket";
 import rpj from "./promise/read-package-json";
 
 function findOutdatedDeps(LOG, out) {
@@ -140,7 +141,13 @@ export default function (options) {
             selectPushPromise(LOG, options, git, "origin", newBranch)
                 .then(() => [baseBranch, newBranch, diff]))
         .then(([baseBranch, newBranch, diff]) => git.remoteurl("origin")
-            .then(remote => [new GitHub(options, remote), baseBranch, newBranch, diff]))
+            .then(remote => {
+                if (options.bitbucket) {
+                    return [new BitBucket(options, remote), baseBranch, newBranch, diff];
+                } else {
+                    return [new GitHub(options, remote), baseBranch, newBranch, diff];
+                }
+            }))
         .then(([github, baseBranch, newBranch, diff]) =>
             github.pullRequest(baseBranch, newBranch, diff)
                 .then(report => [report, newBranch]))
