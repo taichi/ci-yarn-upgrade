@@ -42,13 +42,4 @@ workflows:
   build:
     jobs:
       - build
-  scheculed-upgrade:
-    triggers:
-      - schedule:
-          cron: "0 13 * * 3"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - yarn-upgrade
+
