@@ -1,5 +1,10 @@
 # ci-yarn-upgrade [![CircleCI](https://circleci.com/gh/taichi/ci-yarn-upgrade.svg?style=svg)](https://circleci.com/gh/taichi/ci-yarn-upgrade)
 
+
+# this command no longer update. 
+successor tools is [taichi/actions-package-update](https://github.com/taichi/actions-package-update)
+
+
 This command keeps npm dependencies up-to-date by making pull requests from CI.
 
 ![ci-yarn-upgrade](docs/ci-yarn-upgrade.png)
